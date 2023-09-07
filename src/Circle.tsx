@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface ContainerProps {
   aaa: string;
+  bolderColors: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -10,16 +11,23 @@ const Container = styled.div<ContainerProps>`
   height: 200px;
   border-radius: 100px;
   background-color: ${(props) => props.aaa};
+  border: 5px solid ${(props) => props.bolderColors};
 `;
 
 ///////////////////////////
 
 interface CircleProps {
   bgColor: string;
+  bolderColors?: string;
+  text?: string | undefined;
 }
 
-function Circle({ bgColor }: CircleProps) {
-  return <Container aaa={bgColor} />;
+function Circle({ bgColor, bolderColors, text = "default text" }: CircleProps) {
+  return (
+    <Container aaa={bgColor} bolderColors={bolderColors ?? bgColor}>
+      {text}
+    </Container>
+  );
 }
 
 export default Circle;

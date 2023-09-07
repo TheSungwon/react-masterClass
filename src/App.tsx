@@ -5,7 +5,7 @@ import Circle from "./Circle";
 function App() {
   return (
     <div>
-      <Circle bgColor="teal" />
+      <Circle bolderColors="black" bgColor="teal" />
       <Circle bgColor="tomato" />
     </div>
   );
