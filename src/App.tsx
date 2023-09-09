@@ -12,7 +12,7 @@ function App() {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(`hello~~  ${value}`);
+    console.log(`hello~~   ${value}`);
   };
   return (
     <div>
