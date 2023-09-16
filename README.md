@@ -68,3 +68,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### npm command
+
+npx create-react-app ~~~ --template typescript
+
+or
+npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+
+npm i styled-components
+
+npm i react-router-dom@6.4
+
+npm run build
+
+###
