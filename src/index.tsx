@@ -1,11 +1,12 @@
 import React from "react";
 //import ReactDOM from "react-dom/client";
 import ReactDOM from "react-dom";
-import App from "./App";
+import { RouterProvider } from "react-router-dom";
+import Router from "./screens/Router";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={Router} />
   </React.StrictMode>,
   document.getElementById("root")
 );
