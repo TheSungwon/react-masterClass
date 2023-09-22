@@ -1,7 +1,19 @@
-function Home() {
-  const users: any = []; //에러발생을 위해 선언
+import { Link } from "react-router-dom";
+import { db } from "../db";
 
-  return <h1>Home</h1>; //에러발생을 위해 선언
+function Home() {
+  return (
+    <div>
+      <h1>Users</h1>
+      <ul>
+        {db.map((db) => (
+          <li key={db.id}>
+            <Link to={`/users/${db.id}`}>{db.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default Home;
