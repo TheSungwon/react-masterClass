@@ -12,7 +12,7 @@ function User() {
       </h1>
       <hr />
       <Link to={"followers"}>See Followers</Link>
-      <Outlet />
+      <Outlet context={{ nameOfMyUser: db[Number(userId) - 1].name }} />
     </div>
   );
 }
