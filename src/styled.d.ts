@@ -14,6 +14,7 @@ declare module "styled-components" {
 
     textColor: string;
     bgColor: string;
-    btnColor: string;
+    // btnColor: string;
+    accentColor: string;
   }
 }
