@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Price from "./Price";
+import Chart from "./Chart";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -11,6 +13,31 @@ const Container = styled.div`
   max-width: 480px;
   margin: 0 auto;
 `;
+
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+`;
+
+const OverviewItem = styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+
+span: first-child{
+  font-size-10px;
+  font-weight:400;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+`;
+
+const Description = styled.p`
+  margin: 20px 0px;
+`;
+
 interface InfoData {
   id: string;
   name: string;
@@ -74,9 +101,11 @@ function Coin() {
   //console.log(coinId);
 
   //key값 가져오기
+  //const result = Object.keys(temp1).join("\n")
   // console.log(result);
 
   //type가져오기
+  //const type = Object.values(temp1).map(v => typeof v).join("\n")
   // console.log(type);
 
   //////
@@ -103,15 +132,57 @@ function Coin() {
 
       setInfo(infoData);
       setPriceInfo(priceData);
+      setLoading(false);
     })();
-  }, []);
+  }, [coinId]); //hook안에서 사용 한 것은 [], dependency를 넣어줘야 함
+  //hook에서 사용 한 것은 coinId를 사용
+  //coinId가 변하면 코드가 재실행 됨
+
   const [loading, setLoading] = useState(true);
 
   return (
     <Container>
-      <Title>{state?.name || "aaa......."}</Title>
+      <Title>
+        {state?.name ? state.name : loading ? "loading........" : info?.name}
+      </Title>
 
-      {loading ? "loading..." : <h1>coinId: {coinId}</h1>}
+      {loading ? (
+        "loading..."
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>{info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>open source:</span>
+              <span>{info?.open_source ? "true" : "false"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Supply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+
+            <OverviewItem>
+              <span>Quoted: market cap</span>
+              <span>{priceInfo?.quotes.USD.market_cap}</span>
+            </OverviewItem>
+          </Overview>
+
+          <Routes>
+            <Route path={"price"} element={<Price />} />
+            <Route path={"chart"} element={<Chart />} />
+          </Routes>
+        </>
+      )}
     </Container>
   );
 }
