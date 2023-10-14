@@ -10,6 +10,8 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchTickerInfo } from "../api";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -124,12 +126,12 @@ interface PriceData {
     };
   };
 }
-
 interface RouteState {
   state: { name: string };
 }
+
 function Coin() {
-  const { coinId } = useParams();
+  const { coinId } = useParams<{ coinId: string }>();
   //console.log(coinId);
 
   //key값 가져오기
@@ -147,40 +149,56 @@ function Coin() {
   // } = useLocation() as RouteState;
   // console.log(name);
 
-  const [info, setInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
+  // const [info, setInfo] = useState<InfoData>();
+  // const [priceInfo, setPriceInfo] = useState<PriceData>();
 
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
-  console.log(priceMatch);
-  console.log(chartMatch);
+  // console.log(priceMatch);
+  // console.log(chartMatch);
 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      console.log(infoData);
+  // useEffect(() => {
+  //   (async () => {
+  //     const infoData = await (
+  //       await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+  //     ).json();
+  //     //console.log(infoData);
 
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      console.log(priceData);
+  //     const priceData = await (
+  //       await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+  //     ).json();
+  //     //console.log(priceData);
 
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]); //hook안에서 사용 한 것은 [], dependency를 넣어줘야 함
+  //     setInfo(infoData);
+  //     setPriceInfo(priceData);
+  //     setLoading(false);
+  //   })();
+  // }, [coinId]); //hook안에서 사용 한 것은 [], dependency를 넣어줘야 함
   //hook에서 사용 한 것은 coinId를 사용
   //coinId가 변하면 코드가 재실행 됨
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["coinInfo", coinId],
+    () => fetchCoinInfo(coinId!)
+  );
+  const { isLoading: tickerLoading, data: tickerData } = useQuery<PriceData>(
+    ["tickerInfo", coinId],
+    () => fetchTickerInfo(coinId!)
+  );
+  console.log(infoData, "info useQuery");
+  console.log(tickerData, "tickeruseQuery");
+
+  const loading = infoLoading || tickerLoading;
   return (
     <Container>
       <Title>
-        {state?.name ? state.name : loading ? "loading........" : info?.name}
+        {state?.name
+          ? state.name
+          : loading
+          ? "loading........"
+          : infoData?.name}
       </Title>
 
       {loading ? (
@@ -190,28 +208,28 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>open source:</span>
-              <span>{info?.open_source ? "true" : "false"}</span>
+              <span>{infoData?.open_source ? "true" : "false"}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Supply:</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickerData?.total_supply}</span>
             </OverviewItem>
 
-            <OverviewItem>
+            {/* <OverviewItem>
               <span>Quoted: market cap</span>
-              <span>{priceInfo?.quotes.USD.market_cap}</span>
-            </OverviewItem>
+              <span>{tickerData?.quotes.USD.market_cap}</span>
+            </OverviewItem> */}
           </Overview>
           <Tabs>
             <Tab isActive={priceMatch !== null}>
