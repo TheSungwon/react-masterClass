@@ -82,4 +82,7 @@ npm i react-router-dom@6.4
 
 npm run build
 
+apexcharts js
+npm install --save react-apexcharts apexcharts
+
 ###
