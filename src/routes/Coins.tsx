@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { fetchCoins } from "../api";
 import { useQuery } from "react-query";
+import { Helmet } from "react-helmet";
 
 interface CoinInterface {
   id: string;
@@ -101,9 +102,9 @@ function Coins() {
 
   return (
     <Container>
-      <Header>
-        <Title>코인</Title>
-      </Header>
+      <Helmet>
+        <title>코인</title>
+      </Helmet>
       {isLoading ? (
         <Loader> LOADING . . . </Loader>
       ) : (

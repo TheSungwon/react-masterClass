@@ -12,6 +12,7 @@ import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchTickerInfo } from "../api";
+import { Helmet } from "react-helmet";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -104,6 +105,7 @@ interface PriceData {
   beta_value: number;
   first_data_at: string;
   last_updated: string;
+  price_usd: string;
   quotes: {
     USD: {
       price: number;
@@ -181,7 +183,10 @@ function Coin() {
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["coinInfo", coinId],
-    () => fetchCoinInfo(coinId!)
+    () => fetchCoinInfo(coinId!),
+    {
+      refetchInterval: 60000,
+    }
   );
   const { isLoading: tickerLoading, data: tickerData } = useQuery<PriceData>(
     ["tickerInfo", coinId],
@@ -193,6 +198,16 @@ function Coin() {
   const loading = infoLoading || tickerLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {" "}
+          {state?.name
+            ? state.name
+            : loading
+            ? "loading........"
+            : infoData?.name}
+        </title>
+      </Helmet>
       <Title>
         {state?.name
           ? state.name
@@ -215,8 +230,8 @@ function Coin() {
               <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>open source:</span>
-              <span>{infoData?.open_source ? "true" : "false"}</span>
+              <span>PRICE:</span>
+              <span>{Number(tickerData?.price_usd).toFixed(2)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

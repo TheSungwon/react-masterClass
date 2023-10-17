@@ -85,4 +85,9 @@ npm run build
 apexcharts js
 npm install --save react-apexcharts apexcharts
 
+npm i react-query
+
+npm i react-helmet
+npm i --save-dev @types/react-helmet
+
 ###
