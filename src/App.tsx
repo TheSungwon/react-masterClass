@@ -73,9 +73,8 @@ function App() {
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : whiteTheme}>
-        <input type="checkbox" onClick={toggleDark} />
         <GlobalStyle />
-        <Router />
+        <Router isDark={isDark} toggleDark={toggleDark} />
 
         <ReactQueryDevtools initialIsOpen={true} />
         {/* usequery옵션 활성 */}

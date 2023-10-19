@@ -5,6 +5,10 @@ import { fetchCoins } from "../api";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
 
+interface ICoinsProps {
+  toggleDark: () => void;
+}
+
 interface CoinInterface {
   id: string;
   name: string;
@@ -15,7 +19,7 @@ interface CoinInterface {
   type: string;
 }
 
-function Coins() {
+function Coins({ toggleDark }: ICoinsProps) {
   const Title = styled.h1`
     color: ${(props) => props.theme.accentColor};
     font-size: 48px;
@@ -105,6 +109,10 @@ function Coins() {
       <Helmet>
         <title>코인</title>
       </Helmet>
+      <Header>
+        <Title>코인</Title>
+        <button onClick={toggleDark}>toggle theme</button>
+      </Header>
       {isLoading ? (
         <Loader> LOADING . . . </Loader>
       ) : (
