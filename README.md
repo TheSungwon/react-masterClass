@@ -90,4 +90,6 @@ npm i react-query
 npm i react-helmet
 npm i --save-dev @types/react-helmet
 
+npm i recoil
+
 ###

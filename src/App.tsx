@@ -3,6 +3,8 @@ import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { darkTheme, whiteTheme } from "./theme";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -67,14 +69,13 @@ a {
 `;
 
 function App() {
-  const [isDark, setDark] = useState(false);
-  const toggleDark = () => setDark((current) => !current);
+  const isDark = useRecoilValue(isDarkAtom); //atom.ts을 사용
 
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : whiteTheme}>
         <GlobalStyle />
-        <Router isDark={isDark} toggleDark={toggleDark} />
+        <Router />
 
         <ReactQueryDevtools initialIsOpen={true} />
         {/* usequery옵션 활성 */}
