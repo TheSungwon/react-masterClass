@@ -4,6 +4,8 @@ import styled, { keyframes } from "styled-components";
 import { fetchCoins } from "../api";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface ICoinsProps {}
 
@@ -77,6 +79,11 @@ function Coins({}: ICoinsProps) {
     margin-left: 5px;
   `;
 
+  //recoil
+  const setDarkAtom = useSetRecoilState(isDarkAtom); //recoil value를 수정하기위한 function
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+  //setState 와 같은 방식으로 작동
+
   //useQuery
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
   console.log(isLoading, "useQuery");
@@ -109,6 +116,7 @@ function Coins({}: ICoinsProps) {
       </Helmet>
       <Header>
         <Title>코인</Title>
+        <button onClick={toggleDarkAtom}>Toggle mode</button>
       </Header>
       {isLoading ? (
         <Loader> LOADING . . . </Loader>
