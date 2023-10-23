@@ -92,4 +92,6 @@ npm i --save-dev @types/react-helmet
 
 npm i recoil
 
+npm i react-hook-form
+
 ###
