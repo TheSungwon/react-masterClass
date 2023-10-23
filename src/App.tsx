@@ -5,6 +5,7 @@ import { darkTheme, whiteTheme } from "./theme";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atoms";
+import ToDoList from "./ToDoList";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -68,18 +69,29 @@ a {
 }
 `;
 
-function App() {
-  const isDark = useRecoilValue(isDarkAtom); //atom.ts을 사용
+// @@@@coin project
+// function App() {
+//   const isDark = useRecoilValue(isDarkAtom); //atom.ts을 사용
 
+//   return (
+//     <>
+//       <ThemeProvider theme={isDark ? darkTheme : whiteTheme}>
+//         <GlobalStyle />
+//         <Router />
+
+//         <ReactQueryDevtools initialIsOpen={true} />
+//         {/* usequery옵션 활성 */}
+//       </ThemeProvider>
+//     </>
+//   );
+// }
+
+// @@@@To-Do list project
+function App() {
   return (
     <>
-      <ThemeProvider theme={isDark ? darkTheme : whiteTheme}>
-        <GlobalStyle />
-        <Router />
-
-        <ReactQueryDevtools initialIsOpen={true} />
-        {/* usequery옵션 활성 */}
-      </ThemeProvider>
+      <GlobalStyle />
+      <ToDoList />
     </>
   );
 }

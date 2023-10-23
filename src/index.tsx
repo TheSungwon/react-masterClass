@@ -4,18 +4,35 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import { ThemeProvider } from "styled-components";
+import { darkTheme } from "./theme";
 
 const queryClient = new QueryClient();
 
+// @@@@coin project
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <RecoilRoot>
+//       {/* recoil을 사용하기 위한 선언 + atoms.ts 파일생성*/}
+//       <QueryClientProvider client={queryClient}>
+//         {/* QueryClientProvider = > userQuery를 사용하기위한 선언 */}
+
+//         <App />
+//       </QueryClientProvider>
+//     </RecoilRoot>
+//   </React.StrictMode>,
+//   document.getElementById("root")
+// );
+
+// @@@@To-Do list project
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
       {/* recoil을 사용하기 위한 선언 + atoms.ts 파일생성*/}
-      <QueryClientProvider client={queryClient}>
-        {/* QueryClientProvider = > userQuery를 사용하기위한 선언 */}
 
+      <ThemeProvider theme={darkTheme}>
         <App />
-      </QueryClientProvider>
+      </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
