@@ -34,6 +34,7 @@ interface IForm {
   lastName?: string;
   password: string;
   passwordCheck: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -42,6 +43,9 @@ function ToDoList() {
     watch,
     handleSubmit,
     formState: { errors },
+    setError, //에러 발생 시키기 (e.g. 비밀번호 체크, 전체form)
+    //발생하는 문제에 따라 추가적인 에러를 설정할 수 있게 해줌
+    //사용법은 onValid 화살표 함수
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com", //defaultValues로 기본값 설정
@@ -62,8 +66,22 @@ function ToDoList() {
   //handleSubmit은 validation, preventDefault, ...기능
   //onValid 는필수, 와 onInvalid를 인자로 받음 onValid는 유효할때, onValid는 X
   const onValid = (data: IForm) => {
+    //valid 통과하고 클릭해야 실행 됨
+
     console.log(data, "onValid");
+    if (data.password !== data.passwordCheck) {
+      setError(
+        "passwordCheck",
+        { message: "password are not the same!!!" },
+        {
+          shouldFocus: true, // 에러난 곳으로 포커스 이동
+        }
+      );
+    }
+
+    // setError("extraError", { message: "server offline" });
   };
+
   //...register 에 {required:true} 유효성검증 , {required:true, minLength: 5}
   //입력안된 채로 submit하면 invalid input에 포커스 커서
 
@@ -82,6 +100,10 @@ function ToDoList() {
         onSubmit={handleSubmit(onValid)} //handleSubmit => hook form
       >
         <input
+          style={{
+            borderColor: errors?.email?.message && "red",
+            borderWidth: "10px",
+          }}
           {...register("email", {
             required: "email check error",
             pattern: {
@@ -91,7 +113,7 @@ function ToDoList() {
           })}
           placeholder="Email"
         />
-        <span style={{ color: "red" }}>{errors?.email?.message as string}</span>
+        <span style={{ color: "red" }}>{errors?.email?.message}</span>
         {/* <input {...(register("qq"), { required: true })} placeholder="qq" /> 
         괄호 위치 확인!!!!!!! 
          괄호가 (register required true면 submit할 때 input box에 toggle 생성? + submit, formState안됨
@@ -104,18 +126,28 @@ function ToDoList() {
               value: 5,
               message: "write more than five words",
             },
+            validate: (value) =>
+              value?.includes("sssss") ? "no 'sssss' allowed" : true,
+            //argument는 현재값, return true면 valid무조건 통과, false면 불가
+            //return 에 문자열 넣으면 valid message출력
+            //또는 input에 여러 개 검사가 필요할 수도 있기 때문에 객체 리터럴로 선언
           })}
           placeholder="firstName"
         />
-        <span style={{ color: "red" }}>
-          {errors?.firstName?.message as string}
-        </span>
+        <span style={{ color: "red" }}>{errors?.firstName?.message}</span>
         <input
           {...register("lastName", {
             required: "has errors",
             minLength: {
               value: 5,
               message: "write more than five words",
+            },
+            validate: {
+              //아무렇게나 써도 됨
+              asdfafd: (value) => (value?.includes("aaa") ? "aaa" : true),
+              fdsa: (value) => (value?.includes("bbb") ? "bbb" : true),
+              ffff: async (value) => (value?.includes("bbb") ? "bbb" : true),
+              //async로 만들어서 서버응답을 받을 수도 있음
             },
           })}
           placeholder="lastName"
@@ -151,6 +183,7 @@ function ToDoList() {
         </span>
 
         <button>Add</button>
+        {errors?.extraError?.message}
       </form>
     </div>
   );
