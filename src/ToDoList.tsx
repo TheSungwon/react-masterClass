@@ -28,6 +28,38 @@ import { useForm } from "react-hook-form";
 //     </div>
 //   );
 // }
+
+interface IToDoForm {
+  todo: string;
+}
+function ToDoList() {
+  const { register, handleSubmit, formState, reset, setValue } =
+    useForm<IToDoForm>();
+  const onValid = (data: IToDoForm) => {
+    console.log(data.todo, " onValid");
+    setValue("todo", ""); //input 버튼 누르면 값 비워지게
+    reset();
+  };
+
+  console.log(formState.errors);
+  return (
+    <div>
+      <form onSubmit={handleSubmit(onValid)}>
+        <input
+          {...register("todo", {
+            required: "please write a To Do.",
+            validate: (value) => (value === "" ? "dddddd" : true),
+          })}
+          placeholder="write a to do"
+        />
+        <button>add .</button>
+      </form>
+    </div>
+  );
+}
+export default ToDoList;
+
+//react hook form e.g.
 interface IForm {
   email: string;
   firstName?: string; //필수값 아니라면 ?
@@ -37,7 +69,7 @@ interface IForm {
   extraError?: string;
 }
 
-function ToDoList() {
+function ToDoListUseReactHookForm() {
   const {
     register,
     watch,
@@ -188,5 +220,3 @@ function ToDoList() {
     </div>
   );
 }
-
-export default ToDoList;
