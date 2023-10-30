@@ -7,6 +7,9 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import { todoState } from "../atomsTodo";
+import CreateToDo from "./CreateToDo";
+import ToDo from "./ToDo";
 
 //react hook form 안 썻을 경우..
 // function ToDoList() {
@@ -36,63 +39,18 @@ import {
 //   );
 // }
 
-// atom에 쓰이는 타입스크립트 , default는 배열.
-interface IToDo {
-  text: string;
-  id: number;
-  category: " TO_DO" | "DOING" | "DONE"; //string 형태로 해당 3가지 값만 받을 수 있다.
-}
-
-//배열형태로 ITODo[]
-const todoState = atom<IToDo[]>({
-  key: "todo",
-  default: [],
-});
-interface IToDoForm {
-  todo: string;
-}
 function ToDoList() {
-  // const todoValue = useRecoilValue(todoState);
-  // const modFn = useSetRecoilState(todoState);
-  const [todoValue, modFn] = useRecoilState(todoState); // useState hook처럼 사용할 수 있다.
+  const todo = useRecoilValue(todoState);
 
-  const { register, handleSubmit, formState, reset, setValue } =
-    useForm<IToDoForm>();
-  const onValid = ({ todo }: IToDoForm) => {
-    // console.log(todo, " onValid");
-    setValue("todo", ""); //input 버튼 누르면 값 비워지게
-    reset();
-
-    modFn((prev) => [
-      { text: todo, id: Date.now(), category: " TO_DO" },
-      ...prev,
-    ]);
-    //기존값 다시 받아서 todo값 추가된 배열 반환
-  };
-  console.log(todoValue);
-
-  // console.log(formState.errors);
   return (
     <>
       <div>
         <h1 style={{ fontSize: "60px", color: "green" }}>To Do List</h1>
-        <form onSubmit={handleSubmit(onValid)}>
-          <input
-            {...register("todo", {
-              required: "please write a To Do.",
-              validate: (value) => (value === "" ? "123" : true),
-            })}
-            placeholder="write a to do"
-            autoCorrect="none"
-          />
-          <span style={{ color: "red" }}>
-            {formState?.errors?.todo ? formState?.errors?.todo?.message : ""}
-          </span>
-          <button>add .</button>
-        </form>
+        <hr />
+        <CreateToDo />
         <ul>
-          {todoValue.map((todo) => (
-            <li key={todo.id}>{todo.text}</li>
+          {todo.map((todo) => (
+            <ToDo key={todo.id} {...todo} />
           ))}
         </ul>
       </div>
