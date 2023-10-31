@@ -15,7 +15,7 @@ function CreateToDo() {
     reset();
 
     setTodo((prev) => [
-      { text: todo, id: Date.now(), category: " TO_DO" },
+      { text: todo, id: Date.now(), category: "TO_DO" },
       ...prev,
     ]);
     //기존값 다시 받아서 todo값 추가된 배열 반환

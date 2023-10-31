@@ -4,7 +4,7 @@ import { atom } from "recoil";
 export interface IToDo {
   text: string;
   id: number;
-  category: " TO_DO" | "DOING" | "DONE"; //string 형태로 해당 3가지 값만 받을 수 있다.
+  category: "TO_DO" | "DOING" | "DONE"; //string 형태로 해당 3가지 값만 받을 수 있다.
 }
 
 //배열형태로 ITODo[]

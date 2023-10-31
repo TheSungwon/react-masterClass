@@ -44,7 +44,7 @@ function ToDoList() {
 
   return (
     <>
-      <div>
+      <div style={{ margin: "1em", padding: "1em" }}>
         <h1 style={{ fontSize: "60px", color: "green" }}>To Do List</h1>
         <hr />
         <CreateToDo />
