@@ -16,12 +16,14 @@ const Loader = styled.span`
 `;
 
 const Button = styled.button`
-  background: ${(props) => props.theme.accentColor};
+  background: ${({ children }) =>
+    children === "Doing" ? "yellow" : children === "To Do" ? "white" : "dark"};
 
   font-size: 1em;
   border: solid #bf4f74;
   border-radius: 30px;
   animation: ${breathe} 3.5s infinite;
+  cursor: pointer;
 
   display: "flex";
 `;
@@ -36,22 +38,35 @@ function ToDo({ text, category, ...todo }: IToDo) {
     //typescript select category
     // newCategory:"TO_DO" | "DOING" | "DONE" 처럼 쓸 수 있지만 인터페이스 키값 셀렉해서 사용하기
 
-    console.log(newCategory);
+    setTodo((oldTodo) => {
+      console.log(oldTodo, "setTodo");
+      console.log(todo.id, "todo.id");
+      const targetIndex = oldTodo.findIndex((td) => td.id === todo.id);
+      console.log(targetIndex, "targetIndex");
+
+      const oldTD = oldTodo[targetIndex];
+      const newTD = { text, id: todo.id, category: newCategory };
+      console.log(oldTD, "oldTD");
+      console.log(newTD, "newTD");
+      return oldTodo;
+    });
   };
   //컴포넌트는 key 필요없으므로 삭제 <li key={todo.id} ....
   return (
     <li style={{ marginBottom: "1em" }}>
-      <Loader>{text} </Loader>
+      <Loader>
+        {category} : {text}
+      </Loader>
       <div>
         {/* TO_DO" | "DOING" | "DONE */}
         {category !== "DOING" && (
           <Button onClick={() => onClick("DOING")}>Doing</Button>
         )}
         {category !== "TO_DO" && (
-          <Button onClick={() => onClick("DOING")}>To Do</Button>
+          <Button onClick={() => onClick("TO_DO")}>To Do</Button>
         )}
         {category !== "DONE" && (
-          <Button onClick={() => onClick("DOING")} color="red">
+          <Button onClick={() => onClick("DONE")} color="red">
             Done
           </Button>
         )}
