@@ -17,7 +17,7 @@ const Loader = styled.span`
 
 const Button = styled.button`
   background: ${({ children }) =>
-    children === "Doing" ? "yellow" : children === "To Do" ? "white" : "dark"};
+    children === "Doing" ? "yellow" : children === "To Do" ? "white" : "red"};
 
   font-size: 1em;
   border: solid #bf4f74;
@@ -39,16 +39,31 @@ function ToDo({ text, category, ...todo }: IToDo) {
     // newCategory:"TO_DO" | "DOING" | "DONE" 처럼 쓸 수 있지만 인터페이스 키값 셀렉해서 사용하기
 
     setTodo((oldTodo) => {
-      console.log(oldTodo, "setTodo");
-      console.log(todo.id, "todo.id");
+      // console.log(oldTodo, "setTodo");
+      // console.log(todo.id, "todo.id");
       const targetIndex = oldTodo.findIndex((td) => td.id === todo.id);
       console.log(targetIndex, "targetIndex");
 
-      const oldTD = oldTodo[targetIndex];
       const newTD = { text, id: todo.id, category: newCategory };
-      console.log(oldTD, "oldTD");
-      console.log(newTD, "newTD");
-      return oldTodo;
+      // console.log(oldTD, "oldTD");
+      // console.log(newTD, "newTD");
+      console.log([
+        ...oldTodo.slice(0, targetIndex),
+        newTD,
+        ...oldTodo.slice(targetIndex + 1),
+      ]);
+      const newToDoArray = [
+        ...oldTodo.slice(0, targetIndex),
+        newTD,
+        ...oldTodo.slice(targetIndex + 1),
+      ];
+      //배열을 삭제하지 않고 slice와 targetIndex로 새 배열을 만들어서 교체하기
+      // [1,2,3,4,5] 와 index가 2 이면
+      // slice(0,2)하면 [1,2] 까지 자르고
+      // + 변경하려는 값
+      // slice(target+1) [4,5] 까지 잘라서 세 개를 합쳐서 반환하면 변경 된다.
+
+      return newToDoArray;
     });
   };
   //컴포넌트는 key 필요없으므로 삭제 <li key={todo.id} ....
