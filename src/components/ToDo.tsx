@@ -3,14 +3,14 @@ import { IToDo, todoState } from "../atomsTodo";
 import { useSetRecoilState } from "recoil";
 
 const breathe = keyframes`
-0% {opacity:1;}
-50%{opacity:0.5;}
+0% {opacity:1; }
+50%{opacity:0.5; }
 100%{opacity:1;}
 `;
 const Loader = styled.span`
-  color: red;
+  color: white;
   text-align: center;
-  animation: ${breathe} 0.5s infinite;
+  animation: ${breathe} 1.5s infinite;
 
   // display: block;
 `;
@@ -24,8 +24,6 @@ const Button = styled.button`
   border-radius: 30px;
   animation: ${breathe} 3.5s infinite;
   cursor: pointer;
-
-  display: "flex";
 `;
 
 function ToDo({ text, category, ...todo }: IToDo) {
@@ -68,7 +66,7 @@ function ToDo({ text, category, ...todo }: IToDo) {
   };
   //컴포넌트는 key 필요없으므로 삭제 <li key={todo.id} ....
   return (
-    <li style={{ marginBottom: "1em" }}>
+    <li>
       <Loader>
         {category} : {text}
       </Loader>
@@ -81,9 +79,7 @@ function ToDo({ text, category, ...todo }: IToDo) {
           <Button onClick={() => onClick("TO_DO")}>To Do</Button>
         )}
         {category !== "DONE" && (
-          <Button onClick={() => onClick("DONE")} color="red">
-            Done
-          </Button>
+          <Button onClick={() => onClick("DONE")}>Done</Button>
         )}
         {/* onClick을 익명함수로 만들어서 사용해야 인자를 전달할 수 있다. */}
 

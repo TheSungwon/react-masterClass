@@ -7,9 +7,10 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
-import { todoState } from "../atomsTodo";
+import { todoSelector, todoState } from "../atomsTodo";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
+import styled from "styled-components";
 
 //react hook form 안 썻을 경우..
 // function ToDoList() {
@@ -39,25 +40,51 @@ import ToDo from "./ToDo";
 //   );
 // }
 
+const Div = styled.div`
+  margin: 1em;
+  padding: 1em;
+`;
+
 function ToDoList() {
-  const todo = useRecoilValue(todoState);
+  const todoRecoil = useRecoilValue(todoState);
+  const [toDo, doing, done] = useRecoilValue(todoSelector); // todoSelector는 2중배열이기 때문에 구조분해[]
 
   return (
     <>
-      <div style={{ margin: "1em", padding: "1em" }}>
-        <h1 style={{ fontSize: "60px", color: "green" }}>To Do List</h1>
-        <hr />
+      <Div>
         <CreateToDo />
+        <h1 style={{ fontSize: "35px", color: "green" }}>To Do List</h1>
         <ul>
-          {todo.map((todo) => (
+          {toDo.map((todo) => (
             <ToDo key={todo.id} {...todo} />
           ))}
         </ul>
-      </div>
+        <hr />
+        <h1 style={{ fontSize: "35px", color: "green" }}>Doing List</h1>
+        <ul>
+          {doing.map((todo) => (
+            <ToDo key={todo.id} {...todo} />
+          ))}
+        </ul>
+        <hr />
+        <h1 style={{ fontSize: "35px", color: "green" }}>Done List</h1>
+        <ul>
+          {done.map((todo) => (
+            <ToDo key={todo.id} {...todo} />
+          ))}
+        </ul>
+        <hr />
+      </Div>
     </>
   );
 }
 export default ToDoList;
+//
+//
+//
+//
+//
+//
 
 //react hook form e.g.
 interface IForm {
