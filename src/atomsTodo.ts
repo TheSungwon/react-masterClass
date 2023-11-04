@@ -13,6 +13,11 @@ export const todoState = atom<IToDo[]>({
   default: [],
 });
 
+export const categoryState = atom({
+  key: "category",
+  default: "TO_DO",
+});
+
 //selector는 atom을 가져다가 *output을 변형한다. (e.g. category 분류) state를 변형하지 않음
 //get function으로 atom을 불러옴
 //e.g. useRecoilValue(todoSelector)
@@ -22,10 +27,13 @@ export const todoSelector = selector({
     const toDos = get(todoState); //todo atom을 받아와서 category를 filter로
     //구별해서 다시 배열에 담아 반환. => [[{},{}, ],[{}, ],[{},{}, {}, ]]  이중배열
 
-    return [
-      toDos.filter((todo) => todo.category === "TO_DO"),
-      toDos.filter((todo) => todo.category === "DOING"),
-      toDos.filter((todo) => todo.category === "DONE"),
-    ];
+    const todosCategory = get(categoryState);
+    return toDos.filter((todo) => todo.category === todosCategory);
+
+    // return [
+    //   toDos.filter((todo) => todo.category === "TO_DO"),
+    //   toDos.filter((todo) => todo.category === "DOING"),
+    //   toDos.filter((todo) => todo.category === "DONE"),
+    // ];
   },
 });

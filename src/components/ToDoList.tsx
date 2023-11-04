@@ -7,7 +7,7 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
-import { todoSelector, todoState } from "../atomsTodo";
+import { IToDo, categoryState, todoSelector, todoState } from "../atomsTodo";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 import styled from "styled-components";
@@ -47,13 +47,41 @@ const Div = styled.div`
 
 function ToDoList() {
   const todoRecoil = useRecoilValue(todoState);
-  const [toDo, doing, done] = useRecoilValue(todoSelector); // todoSelector는 2중배열이기 때문에 구조분해[]
+  //const [toDo, doing, done] = useRecoilValue(todoSelector); // todoSelector는 2중배열이기 때문에 구조분해[]
+  //todoSelector가 더 이상 이중배열을 반환 하지 않도록 변경 됨
+
+  const todos = useRecoilValue(todoSelector);
+
+  const [category, setCategory] = useRecoilState(categoryState);
+  const onInput = (value: IToDo["category"]) => {
+    return setCategory(value);
+  };
+  console.log(category); //recoil value는 함수 밖에서 찍어보기
+  console.log(todos);
 
   return (
     <>
       <Div>
+        {/* using select */}
+        <select
+          onInput={(e) => onInput(e.currentTarget.value as IToDo["category"])}
+        >
+          <option value={"TO_DO"}>TO DO</option>
+          <option value={"DOING"}>DOING</option>
+          <option value={"DONE"}>DONE</option>
+        </select>
         <CreateToDo />
-        <h1 style={{ fontSize: "35px", color: "green" }}>To Do List</h1>
+        <ul>
+          {todos?.map((todo) => (
+            <ToDo key={todo.id} {...todo} />
+          ))}
+        </ul>
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/* not using select */}
+        {/* <h1 style={{ fontSize: "35px", color: "green" }}>To Do List</h1>
         <ul>
           {toDo.map((todo) => (
             <ToDo key={todo.id} {...todo} />
@@ -73,7 +101,7 @@ function ToDoList() {
             <ToDo key={todo.id} {...todo} />
           ))}
         </ul>
-        <hr />
+        <hr /> */}
       </Div>
     </>
   );
