@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { IToDo, todoState } from "../atomsTodo";
+import { IToDo, categories, todoState } from "../atomsTodo";
 import { useSetRecoilState } from "recoil";
 
 const breathe = keyframes`
@@ -72,14 +72,14 @@ function ToDo({ text, category, ...todo }: IToDo) {
       </Loader>
       <div>
         {/* TO_DO" | "DOING" | "DONE */}
-        {category !== "DOING" && (
-          <Button onClick={() => onClick("DOING")}>Doing</Button>
+        {category !== categories.DOING && (
+          <Button onClick={() => onClick(categories.DOING)}>Doing</Button>
         )}
-        {category !== "TO_DO" && (
-          <Button onClick={() => onClick("TO_DO")}>To Do</Button>
+        {category !== categories.TO_DO && (
+          <Button onClick={() => onClick(categories.TO_DO)}>To Do</Button>
         )}
-        {category !== "DONE" && (
-          <Button onClick={() => onClick("DONE")}>Done</Button>
+        {category !== categories.DONE && (
+          <Button onClick={() => onClick(categories.DONE)}>Done</Button>
         )}
         {/* onClick을 익명함수로 만들어서 사용해야 인자를 전달할 수 있다. */}
 

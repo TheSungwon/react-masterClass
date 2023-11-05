@@ -7,7 +7,13 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
-import { IToDo, categoryState, todoSelector, todoState } from "../atomsTodo";
+import {
+  IToDo,
+  categories,
+  categoryState,
+  todoSelector,
+  todoState,
+} from "../atomsTodo";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 import styled from "styled-components";
@@ -63,12 +69,10 @@ function ToDoList() {
     <>
       <Div>
         {/* using select */}
-        <select
-          onInput={(e) => onInput(e.currentTarget.value as IToDo["category"])}
-        >
-          <option value={"TO_DO"}>TO DO</option>
-          <option value={"DOING"}>DOING</option>
-          <option value={"DONE"}>DONE</option>
+        <select onInput={(e) => onInput(e.currentTarget.value as categories)}>
+          <option value={categories.TO_DO}>TO DO</option>
+          <option value={categories.DOING}>DOING</option>
+          <option value={categories.DONE}>DONE</option>
         </select>
         <CreateToDo />
         <ul>
