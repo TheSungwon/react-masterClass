@@ -11,6 +11,7 @@ const Loader = styled.span`
   color: white;
   text-align: center;
   animation: ${breathe} 1.5s infinite;
+  padding: 5px;
 
   // display: block;
 `;
@@ -24,6 +25,13 @@ const Button = styled.button`
   border-radius: 30px;
   animation: ${breathe} 3.5s infinite;
   cursor: pointer;
+  :hover {
+    background-color: aqua;
+    border-color: transparent;
+  }
+  margin-inline: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 `;
 
 function ToDo({ text, category, ...todo }: IToDo) {
@@ -64,6 +72,19 @@ function ToDo({ text, category, ...todo }: IToDo) {
       return newToDoArray;
     });
   };
+
+  const onClickDelete = (todoId: any) => {
+    console.log(todoId);
+    setTodo((oldTodo) => {
+      const targetIndex = oldTodo.findIndex((find) => find.id === todoId);
+      console.log(oldTodo.filter((_, i) => i !== targetIndex));
+
+      console.log(targetIndex);
+
+      const afterDeleteArray = oldTodo.filter((_, i) => i !== targetIndex);
+      return afterDeleteArray;
+    });
+  };
   //컴포넌트는 key 필요없으므로 삭제 <li key={todo.id} ....
   return (
     <li>
@@ -81,6 +102,7 @@ function ToDo({ text, category, ...todo }: IToDo) {
         {category !== categories.DONE && (
           <Button onClick={() => onClick(categories.DONE)}>Done</Button>
         )}
+        <button onClick={() => onClickDelete(todo.id)}>delete</button>
         {/* onClick을 익명함수로 만들어서 사용해야 인자를 전달할 수 있다. */}
 
         {/* 익명함수없이 함수명만 써서 사용하려면 */}

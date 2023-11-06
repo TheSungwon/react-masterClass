@@ -21,7 +21,7 @@ function CreateToDo() {
   };
   return (
     <>
-      <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onValid)} style={{ marginBottom: "15px" }}>
         <input
           {...register("todo", {
             required: "please write a To Do.",
