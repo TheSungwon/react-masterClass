@@ -5,11 +5,21 @@ export const minuteState = atom({
   default: 0,
 });
 
-export const hourState = selector({
+// <'N'umber> X
+export const hourState = selector<number>({
   key: "hour",
   get: ({ get }) => {
     const minutes = get(minuteState);
     console.log(minutes, "select");
     return minutes / 60;
+  },
+
+  set: ({ set }, newValue) => {
+    // 2번째 argument는 set에 보내는 값을 받을 수 있다.
+    console.log(newValue, "newValue");
+    const minutes = Number(newValue) * 60;
+    set(minuteState, minutes);
+
+    //
   },
 });
