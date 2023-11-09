@@ -12,9 +12,12 @@ declare module "styled-components" {
     //   secondary: string;
     // };
 
-    textColor: string;
-    bgColor: string;
+    textColor?: string;
+    bgColor?: string;
     // btnColor: string;
-    accentColor: string;
+    accentColor?: string;
+    //
+    cardColor?: string;
+    boardColor?: string;
   }
 }

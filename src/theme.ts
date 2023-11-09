@@ -11,6 +11,12 @@ export const whiteTheme: DefaultTheme = {
   accentColor: "green",
 };
 
+export const dargTheme: DefaultTheme = {
+  bgColor: "#3f8cf2",
+  cardColor: "white",
+  boardColor: "#dadfe9",
+};
+
 // export const darkTheme: DefaultTheme = {
 //   bgColor: "black",
 //   textColor: "white",
