@@ -1,7 +1,67 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { hourState, minuteState } from "./atomsLecture7";
+//
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 function AppLecture7() {
+  // DragDropContext -> 필수값 onDragEnd, 자식요소
+  // ㄴDroppable 필수값 droppableId, 함수형 자식요소
+  //  ㄴDraggable 필수값 draggableId, index, 함수형 자식요소
+  //
+  const onDragEnd = () => {}; // 드래그를 끝난 시점에 실행되는 함수
+  return (
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="one">
+          {() => (
+            <ul>
+              <Draggable draggableId="first" index={0}>
+                {() => <li>One</li>}
+              </Draggable>
+              <Draggable draggableId="second" index={1}>
+                {() => <li>Two</li>}
+              </Draggable>
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
+  );
+}
+export default AppLecture7;
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+function AppLecture7_recoilSetPractce() {
   const [minuets, setMinutes] = useRecoilState(minuteState);
   const onChangeMinute = (event: React.FormEvent<HTMLInputElement>) => {
     setMinutes(+event.currentTarget.value); // + 를 붙이면 string to number casting
@@ -35,5 +95,3 @@ function AppLecture7() {
     </div>
   );
 }
-
-export default AppLecture7;

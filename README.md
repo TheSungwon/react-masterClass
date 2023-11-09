@@ -94,4 +94,7 @@ npm i recoil
 
 npm i react-hook-form
 
+npm i react-beautiful-dnd
+npm i --save-dev @types/react-beautiful-dnd
+
 ###
