@@ -1,7 +1,12 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { hourState, minuteState } from "./atomsLecture7";
+import { hourState, minuteState, toDoState } from "./atomsLecture7";
 //
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
 import styled, { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -104,7 +109,22 @@ function AppLecture7() {
   // ㄴDroppable 필수값 droppableId, 함수형 자식요소
   //  ㄴDraggable 필수값 draggableId, index, 함수형 자식요소
   //
-  const onDragEnd = () => {}; // 드래그를 끝난 시점에 실행되는 함수
+  //
+  const [toDos, setTodos] = useRecoilState(toDoState);
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    //using splice method
+    // How to use 'splice'
+    // const x = ["a", "b", "c", "d", "f"];
+    // (5) ['a', 'b', 'c', 'd', 'f']
+    // x.splice(1,1);
+    // ['b']
+    // (4) ['a', 'c', 'd', 'f']
+    // x.splice(3,0,"b");
+    // (5) ['a', 'c', 'd', 'b', 'f']
+    //
+    //
+  }; // 드래그를 끝난 시점에 실행되는 함수
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <GlobalStyle />
@@ -112,7 +132,7 @@ function AppLecture7() {
         <Boards>
           <Droppable droppableId="one">
             {(magic) => {
-              console.log(magic);
+              //   console.log(magic);
               return (
                 <Board
                   ref={magic.innerRef}
@@ -120,9 +140,9 @@ function AppLecture7() {
                   style={{ fontSize: "20px" }}
                 >
                   {todos.map((toDo, index) => (
-                    <Draggable draggableId={toDo} index={index}>
+                    <Draggable key={index} draggableId={toDo} index={index}>
                       {(magic) => {
-                        console.log(magic);
+                        // console.log(magic);
                         return (
                           <Card ref={magic.innerRef} {...magic.draggableProps}>
                             <span {...magic.dragHandleProps}>❤</span>
