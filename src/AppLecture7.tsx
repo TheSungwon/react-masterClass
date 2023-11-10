@@ -110,9 +110,9 @@ function AppLecture7() {
   //  ㄴDraggable 필수값 draggableId, index, 함수형 자식요소
   //
   //
-  const [toDos, setTodos] = useRecoilState(toDoState);
+  const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const onDragEnd = ({ destination, source }: DropResult) => {
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     //using splice method
     // How to use 'splice'
     // const x = ["a", "b", "c", "d", "f"];
@@ -124,6 +124,27 @@ function AppLecture7() {
     // (5) ['a', 'c', 'd', 'b', 'f']
     //
     //
+    // splice는 mutation
+    // e.g. x.splice를 하면 x값이 바뀜
+    // non-mutation은 name.toUpperCase()을 해도 name값은 그대로 인 경우
+
+    console.log(draggableId);
+    console.log(destination);
+    console.log(source);
+
+    //destination을 제자리에 둘 수도 있으므로, destination값이 없을수 있다.
+    if (!destination) return;
+
+    setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      //toDosCopy에서 source.index의 1개 삭제
+      toDosCopy.splice(source.index, 1);
+
+      //toDosCopy에 destination.index 위치에 draggableId값 추가
+      toDosCopy.splice(destination?.index, 0, draggableId);
+
+      return toDosCopy;
+    });
   }; // 드래그를 끝난 시점에 실행되는 함수
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -139,8 +160,10 @@ function AppLecture7() {
                   {...magic.droppableProps}
                   style={{ fontSize: "20px" }}
                 >
-                  {todos.map((toDo, index) => (
-                    <Draggable key={index} draggableId={toDo} index={index}>
+                  {toDos.map((toDo, index) => (
+                    <Draggable key={toDo} draggableId={toDo} index={index}>
+                      {/* 버그를 방지하기 위해 key값에는 index값이 아닌 draggableId와 같은 toDo를 줘야함 */}
+
                       {(magic) => {
                         // console.log(magic);
                         return (
