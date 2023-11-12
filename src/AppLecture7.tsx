@@ -8,6 +8,7 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 import styled, { createGlobalStyle } from "styled-components";
+import DraggableCard from "./componentsLecture7/DraggableCard";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -96,12 +97,6 @@ const Board = styled.div`
   border-radius: 5px;
   min-height: 200px;
 `;
-const Card = styled.div`
-  background-color: ${({ theme: { cardColor } }) => cardColor};
-  border-radius: 5px;
-  padding: 10px 10px;
-  margin-top: 10px;
-`;
 
 const todos = ["a", "b", "c", "d", "f"];
 function AppLecture7() {
@@ -161,20 +156,7 @@ function AppLecture7() {
                   style={{ fontSize: "20px" }}
                 >
                   {toDos.map((toDo, index) => (
-                    <Draggable key={toDo} draggableId={toDo} index={index}>
-                      {/* 버그를 방지하기 위해 key값에는 index값이 아닌 draggableId와 같은 toDo를 줘야함 */}
-
-                      {(magic) => {
-                        // console.log(magic);
-                        return (
-                          <Card ref={magic.innerRef} {...magic.draggableProps}>
-                            <span {...magic.dragHandleProps}>❤</span>
-                            {toDo}
-                          </Card>
-                          //dragHandleProps를 준 요소만 드래그 가능
-                        );
-                      }}
-                    </Draggable>
+                    <DraggableCard key={toDo} toDo={toDo} index={index} />
                   ))}
                   {magic.placeholder}
                   {/* placeholder를 사용하면 드래그할 때 Droppable 크기가 고정 */}
