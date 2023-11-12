@@ -24,7 +24,18 @@ export const hourState = selector<number>({
   },
 });
 
-export const toDoState = atom({
+//toDos state는
+//string type의 property 와, string typ의 array로 이루어져 있다.
+interface IToDoState {
+  [key: string]: string[];
+}
+
+export const toDoState = atom<IToDoState>({
   key: "toDo",
-  default: ["a", "b", "c", "d", "f"],
+  // default: ["a", "b", "c", "d", "f"],
+  default: {
+    TO_DO: ["a", "b"],
+    Doing: ["c", "d"],
+    Done: ["e", "f"],
+  },
 });

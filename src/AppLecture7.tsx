@@ -9,6 +9,7 @@ import {
 } from "react-beautiful-dnd";
 import styled, { createGlobalStyle } from "styled-components";
 import DraggableCard from "./componentsLecture7/DraggableCard";
+import Board from "./componentsLecture7/Board";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -74,7 +75,7 @@ a {
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 480px;
+  max-width: 640px;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -84,21 +85,12 @@ const Wrapper = styled.div`
 
 const Boards = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
-`;
-const Board = styled.div`
-  background-color: ${({ theme: { boardColor } }) => {
-    console.log(boardColor);
-    return boardColor;
-  }};
-  padding: 20px 10px;
-  padding-top: 30px;
-  border-radius: 5px;
-  min-height: 200px;
+  gap: 10px;
 `;
 
-const todos = ["a", "b", "c", "d", "f"];
+//const todos = ["a", "b", "c", "d", "f"];
 function AppLecture7() {
   // DragDropContext -> 필수값 onDragEnd, 자식요소
   // ㄴDroppable 필수값 droppableId, 함수형 자식요소
@@ -130,40 +122,31 @@ function AppLecture7() {
     //destination을 제자리에 둘 수도 있으므로, destination값이 없을수 있다.
     if (!destination) return;
 
-    setToDos((oldToDos) => {
-      const toDosCopy = [...oldToDos];
-      //toDosCopy에서 source.index의 1개 삭제
-      toDosCopy.splice(source.index, 1);
+    // setToDos((oldToDos) => {
+    //   const toDosCopy = [...oldToDos];
+    //   //toDosCopy에서 source.index의 1개 삭제
+    //   toDosCopy.splice(source.index, 1);
 
-      //toDosCopy에 destination.index 위치에 draggableId값 추가
-      toDosCopy.splice(destination?.index, 0, draggableId);
+    //   //toDosCopy에 destination.index 위치에 draggableId값 추가
+    //   toDosCopy.splice(destination?.index, 0, draggableId);
 
-      return toDosCopy;
-    });
+    //   return toDosCopy;
+    // });
   }; // 드래그를 끝난 시점에 실행되는 함수
+  //
+  // const x = { a:[1,2,4], b:[5,6,7]};
+  // Object.keys(x).map((boardId) => x[boardId]);
+  //
+  //
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <GlobalStyle />
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => {
-              //   console.log(magic);
-              return (
-                <Board
-                  ref={magic.innerRef}
-                  {...magic.droppableProps}
-                  style={{ fontSize: "20px" }}
-                >
-                  {toDos.map((toDo, index) => (
-                    <DraggableCard key={toDo} toDo={toDo} index={index} />
-                  ))}
-                  {magic.placeholder}
-                  {/* placeholder를 사용하면 드래그할 때 Droppable 크기가 고정 */}
-                </Board>
-              );
-            }}
-          </Droppable>
+          {Object.keys(toDos).map((boardId) => (
+            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>
