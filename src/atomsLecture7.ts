@@ -34,7 +34,7 @@ export const toDoState = atom<IToDoState>({
   key: "toDo",
   // default: ["a", "b", "c", "d", "f"],
   default: {
-    TO_DO: ["a", "b"],
+    "TO DO": ["a", "b"], // TO 띄어쓰기 Do 를 표현하기 위해서 "" 사용
     Doing: ["c", "d"],
     Done: ["e", "f"],
   },

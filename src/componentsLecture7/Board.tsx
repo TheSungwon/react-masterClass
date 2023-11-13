@@ -12,6 +12,13 @@ const Wrapper = styled.div`
   min-height: 200px;
 `;
 
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+
+  font-size: 18px;
+`;
+
 interface IBoardProps {
   toDos: string[];
   boardId: string;
@@ -20,24 +27,27 @@ interface IBoardProps {
 //boardId는 recoil toDoState default object key
 function Board({ toDos, boardId }: IBoardProps) {
   return (
-    <Droppable droppableId={boardId}>
-      {(magic) => {
-        //   console.log(magic);
-        return (
-          <Wrapper
-            ref={magic.innerRef}
-            {...magic.droppableProps}
-            style={{ fontSize: "20px" }}
-          >
-            {toDos.map((toDo, index) => (
-              <DraggableCard key={toDo} toDo={toDo} index={index} />
-            ))}
-            {magic.placeholder}
-            {/* placeholder를 사용하면 드래그할 때 Droppable 크기가 고정 */}
-          </Wrapper>
-        );
-      }}
-    </Droppable>
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(magic) => {
+          //   console.log(magic);
+          return (
+            <div
+              ref={magic.innerRef}
+              {...magic.droppableProps}
+              style={{ fontSize: "20px" }}
+            >
+              {toDos.map((toDo, index) => (
+                <DraggableCard key={toDo} toDo={toDo} index={index} />
+              ))}
+              {magic.placeholder}
+              {/* placeholder를 사용하면 드래그할 때 Droppable 크기가 고정 */}
+            </div>
+          );
+        }}
+      </Droppable>
+    </Wrapper>
   );
 }
 

@@ -99,7 +99,7 @@ function AppLecture7() {
   //
   const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
     //using splice method
     // How to use 'splice'
     // const x = ["a", "b", "c", "d", "f"];
@@ -115,12 +115,34 @@ function AppLecture7() {
     // e.g. x.splice를 하면 x값이 바뀜
     // non-mutation은 name.toUpperCase()을 해도 name값은 그대로 인 경우
 
-    console.log(draggableId);
-    console.log(destination);
-    console.log(source);
-
-    //destination을 제자리에 둘 수도 있으므로, destination값이 없을수 있다.
+    console.log(info);
+    const { draggableId, destination, source } = info;
     if (!destination) return;
+    if (destination?.droppableId === source.droppableId) {
+      //옮기는 board(source)와 옮겨질 board(destination)가 같은지 check
+
+      setToDos((allBoards) => {
+        //source board 값 가져와서 mutate 해주기
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1); //옮긴 번호 위치 삭제
+        boardCopy.splice(destination?.index, 0, draggableId); //옮겨질 번호 위치에 값 입력
+
+        return {
+          ...allBoards, //toDos State의 property 값들 가져오기
+          [source.droppableId]: boardCopy,
+          //...allBoards는 source.droppableId를 따로 적어주었기 때문에
+          //source.droppableId를 제외한 property들이 입력되고
+          //[source.droppableId]:boardCopy 를 따로 입력해줌
+        };
+      });
+    }
+
+    //
+    //
+    //
+    //
+    //destination을 제자리에 둘 수도 있으므로, destination값이 없을수 있다.
+    // if (!destination) return;
 
     // setToDos((oldToDos) => {
     //   const toDosCopy = [...oldToDos];
