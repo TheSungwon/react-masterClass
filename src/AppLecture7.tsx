@@ -115,11 +115,11 @@ function AppLecture7() {
     // e.g. x.splice를 하면 x값이 바뀜
     // non-mutation은 name.toUpperCase()을 해도 name값은 그대로 인 경우
 
-    console.log(info);
     const { draggableId, destination, source } = info;
     if (!destination) return;
     if (destination?.droppableId === source.droppableId) {
       //옮기는 board(source)와 옮겨질 board(destination)가 같은지 check
+      console.log(info);
 
       setToDos((allBoards) => {
         //source board 값 가져와서 mutate 해주기
@@ -133,6 +133,24 @@ function AppLecture7() {
           //...allBoards는 source.droppableId를 따로 적어주었기 때문에
           //source.droppableId를 제외한 property들이 입력되고
           //[source.droppableId]:boardCopy 를 따로 입력해줌
+        };
+      });
+    }
+
+    if (destination?.droppableId !== source.droppableId) {
+      setToDos((allBoards) => {
+        console.log(info);
+        const sourceBoard = [...allBoards[source.droppableId]];
+        //복사하는 것이므로 [...[]] 형태 이거는 복사
+        //allBoards[source.droppableId]  X 이거는 참조
+        const destinationBoard = [...allBoards[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination.index, 0, draggableId);
+
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
         };
       });
     }
