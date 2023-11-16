@@ -10,6 +10,8 @@ const Wrapper = styled.div`
   padding-top: 30px;
   border-radius: 5px;
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.h2`
@@ -17,6 +19,18 @@ const Title = styled.h2`
   font-weight: 600;
 
   font-size: 18px;
+`;
+
+interface IAreaProps {
+  isDraggingOver: boolean;
+  draggingFromThisWith: boolean;
+}
+
+const Area = styled.div<IAreaProps>`
+  background-color: ${({ isDraggingOver, draggingFromThisWith }) =>
+    isDraggingOver ? "black" : draggingFromThisWith ? "pink" : "red"};
+  flex-grow: 1;
+  transition: background-color 1s ease-in-out;
 `;
 
 interface IBoardProps {
@@ -30,20 +44,24 @@ function Board({ toDos, boardId }: IBoardProps) {
     <Wrapper>
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
-        {(magic) => {
+        {(magic, info) => {
+          //snapshot => info로 변경
+          // snapshot.isDraggingOver 드래그해서 들어왔는지 boolean으로 확인
+          // snapshot.draggingFromThisWith 드래그 했는지
           //   console.log(magic);
           return (
-            <div
+            <Area
+              isDraggingOver={info.isDraggingOver}
+              draggingFromThisWith={Boolean(info.draggingFromThisWith)}
               ref={magic.innerRef}
               {...magic.droppableProps}
-              style={{ fontSize: "20px", backgroundColor: "red" }}
             >
               {toDos.map((toDo, index) => (
                 <DraggableCard key={toDo} toDo={toDo} index={index} />
               ))}
               {magic.placeholder}
               {/* placeholder를 사용하면 드래그할 때 Droppable 크기가 고정 */}
-            </div>
+            </Area>
           );
         }}
       </Droppable>
