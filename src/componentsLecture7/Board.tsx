@@ -6,8 +6,7 @@ const Wrapper = styled.div`
     console.log(boardColor);
     return boardColor;
   }};
-  padding: 20px 10px;
-  padding-top: 30px;
+  padding-top: 10px;
   border-radius: 5px;
   min-height: 200px;
   display: flex;
@@ -28,9 +27,14 @@ interface IAreaProps {
 
 const Area = styled.div<IAreaProps>`
   background-color: ${({ isDraggingOver, draggingFromThisWith }) =>
-    isDraggingOver ? "black" : draggingFromThisWith ? "pink" : "red"};
+    isDraggingOver
+      ? "#dfe6e9"
+      : draggingFromThisWith
+      ? "#b2bec3"
+      : "transparent"};
   flex-grow: 1;
   transition: background-color 1s ease-in-out;
+  padding: 20px;
 `;
 
 interface IBoardProps {

@@ -1,11 +1,15 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
-const Card = styled.div`
-  background-color: ${({ theme: { cardColor } }) => cardColor};
+
+const Card = styled.div<{ isDragging: boolean }>`
+  background-color: ${({ theme: { cardColor }, isDragging }) =>
+    isDragging ? "#0fbcf9" : cardColor};
   border-radius: 5px;
   padding: 10px 10px;
   margin-top: 10px;
+  box-shadow: ${({ isDragging }) =>
+    isDragging ? "10px 12px 15px rgba(0, 0, 0, 1)" : "none"};
 `;
 
 interface IDraggableCardProps {
@@ -19,10 +23,14 @@ function DraggableCard({ toDo, index }: IDraggableCardProps) {
       <Draggable key={toDo} draggableId={toDo} index={index}>
         {/* 버그를 방지하기 위해 key값에는 index값이 아닌 draggableId와 같은 toDo를 줘야함 */}
 
-        {(magic) => {
+        {(magic, snapshot) => {
           // console.log(magic);
           return (
-            <Card ref={magic.innerRef} {...magic.draggableProps}>
+            <Card
+              isDragging={snapshot.isDragging}
+              ref={magic.innerRef}
+              {...magic.draggableProps}
+            >
               <span {...magic.dragHandleProps}>❤</span>
               {toDo}
             </Card>
