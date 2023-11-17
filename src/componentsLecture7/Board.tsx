@@ -1,6 +1,7 @@
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
+import { useRef } from "react";
 const Wrapper = styled.div`
   background-color: ${({ theme: { boardColor } }) => {
     console.log(boardColor);
@@ -44,9 +45,23 @@ interface IBoardProps {
 
 //boardId는 recoil toDoState default object key
 function Board({ toDos, boardId }: IBoardProps) {
+  //ref 는 react js component를 통해 html 요소를 가져오는 것.. e.g. getElementById
+  const inputRef = useRef<HTMLInputElement>(null); //default 값은 null , e.g. getElementById
+  const onClick = (event: any) => {
+    //useRef를 사용할 땐 react js 말고 vanilla js 를 쓴다?
+    console.log(event.currentTarget);
+    console.log(inputRef.current);
+    inputRef.current?.focus();
+    setTimeout(() => {
+      inputRef.current?.blur();
+    }, 5000);
+  };
+
   return (
     <Wrapper>
       <Title>{boardId}</Title>
+      <input ref={inputRef} type="text" />
+      <button onClick={onClick}>click</button>
       <Droppable droppableId={boardId}>
         {(magic, info) => {
           //snapshot => info로 변경
