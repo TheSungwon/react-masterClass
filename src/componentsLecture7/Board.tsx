@@ -3,7 +3,8 @@ import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { IToDo } from "../atomsLecture7";
+import { IToDo, toDoState } from "../atomsLecture7";
+import { useSetRecoilState } from "recoil";
 const Wrapper = styled.div`
   background-color: ${({ theme: { boardColor } }) => {
     console.log(boardColor);
@@ -74,8 +75,15 @@ function Board({ toDos, boardId }: IBoardProps) {
   //   <button onClick={onClick}>click</button>
 
   const { register, handleSubmit, setValue } = useForm<IForm>();
+  const setToDos = useSetRecoilState(toDoState);
   const onValid = (data: IForm) => {
-    console.log(data);
+    console.log(data, boardId);
+    setToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [boardId]: [...allBoards[boardId], { id: Date.now(), text: data.toDo }],
+      };
+    });
     setValue("toDo", "");
   };
   return (

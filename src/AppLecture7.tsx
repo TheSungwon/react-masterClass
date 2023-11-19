@@ -124,8 +124,13 @@ function AppLecture7() {
       setToDos((allBoards) => {
         //source board 값 가져와서 mutate 해주기
         const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index]; // boardCopy에서 옮겨지는 오브젝트
+        //오브젝트를 지워지기 전에 grab 해둬야 한다.
+
         boardCopy.splice(source.index, 1); //옮긴 번호 위치 삭제
-        boardCopy.splice(destination?.index, 0, draggableId); //옮겨질 번호 위치에 값 입력
+        // boardCopy.splice(destination?.index, 0, draggableId); //옮겨질 번호 위치에 값 입력
+        // draggableId는 object로 바뀌기전에는 string이었으므로 ..
+        boardCopy.splice(destination?.index, 0, taskObj); //object형태를 추가
 
         return {
           ...allBoards, //toDos State의 property 값들 가져오기
@@ -143,9 +148,11 @@ function AppLecture7() {
         const sourceBoard = [...allBoards[source.droppableId]];
         //복사하는 것이므로 [...[]] 형태 이거는 복사
         //allBoards[source.droppableId]  X 이거는 참조
+        const taskObj = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination.droppableId]];
         sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, draggableId);
+        // destinationBoard.splice(destination.index, 0, draggableId);
+        destinationBoard.splice(destination.index, 0, taskObj);
 
         return {
           ...allBoards,
