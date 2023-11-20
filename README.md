@@ -97,4 +97,23 @@ npm i react-hook-form
 npm i react-beautiful-dnd
 npm i --save-dev @types/react-beautiful-dnd
 
+https://www.framer.com/motion
+https://github.com/framer/motion
+npm install framer-motion
+
+Create React App Configuration Override => craco
+npm i @craco/craco --save
+craco.config.js 파일 생성 됨 => 커스텀 설정 사항적용
+craco.config.js 생성 -> package.js 같은 위치에
+
+framer는 "react-scripts": "5.0.0" 이상 이어야함
+4이하라면 craco.config.js로 수정 -> github에서 찾아 쓰기
+package.json에서
+"scripts": {
+"start": "set PORT=8081 && react-scripts start",
+"build": "react-scripts build",
+"test": "react-scripts test",
+
+    이 3개 의 'react-scripts' 를 craco로 변경해줘야 함
+
 ###

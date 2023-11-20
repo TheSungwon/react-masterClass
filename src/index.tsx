@@ -7,6 +7,7 @@ import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { dargTheme, darkTheme } from "./theme";
 import AppLecture7 from "./AppLecture7";
+import AppLecture8 from "./AppLecture8";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,7 @@ ReactDOM.render(
       {/* recoil을 사용하기 위한 선언 + atoms.ts 파일생성*/}
 
       <ThemeProvider theme={dargTheme}>
-        <AppLecture7 />
+        <AppLecture8 />
         {/* <App /> */}
       </ThemeProvider>
     </RecoilRoot>
