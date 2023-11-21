@@ -66,7 +66,9 @@ a {
 }
 `;
 
-const Wrapper = styled.div`
+//animate가 style components를 사용하려면 styled(motion.TagName)
+// const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -74,7 +76,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
+const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
   background-color: white;
@@ -90,8 +92,18 @@ function AppLecture8() {
     <>
       <GlobalStyle />
       <Wrapper>
-        <Box />
-        <motion.div></motion.div>
+        <Box
+          transition={{
+            type: "spring",
+            damping: 20,
+            stiffness: 100,
+            delay: 0.5,
+          }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1, rotateZ: 360 }}
+        />
+        {/* initial 초기상태 설정 */}
+        {/* animate은 기본으로 spring (튕기는 모션) */}
       </Wrapper>
     </>
   );
