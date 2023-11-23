@@ -88,19 +88,37 @@ function AppLecture8() {
   // framer motion을 사용해서 animate하려면
   // <motion.div ~~ 으로 시작해서 사용
   // <div>으로 animate 불가
+
+  const myVariants = {
+    start: { scale: 0 },
+
+    end: {
+      scale: 1,
+      rotateZ: 360,
+      transition: {
+        type: "spring",
+        damping: 20,
+        stiffness: 100,
+        delay: 0.5,
+      },
+    },
+  };
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <Box
-          transition={{
-            type: "spring",
-            damping: 20,
-            stiffness: 100,
-            delay: 0.5,
-          }}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1, rotateZ: 360 }}
+          // transition={{
+          //   type: "spring",
+          //   damping: 20,
+          //   stiffness: 100,
+          //   delay: 0.5,
+          // }}
+          // initial={{ scale: 0 }}
+          // animate={{ scale: 1, rotateZ: 360 }} 3개 props를 myVariants 변수로 정의
+          variants={myVariants}
+          initial="start" // myVariants 의 start
+          animate="end" // myVariants 의 end
         />
         {/* initial 초기상태 설정 */}
         {/* animate은 기본으로 spring (튕기는 모션) */}
