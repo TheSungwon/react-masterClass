@@ -80,12 +80,9 @@ const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
   /* background-color: white; */
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
 `;
 
 function AppLecture8() {
@@ -93,92 +90,40 @@ function AppLecture8() {
   // <motion.div ~~ 으로 시작해서 사용
   // <div>으로 animate 불가
 
-  const myVariants = {
-    start: { scale: 0 },
-
-    end: {
-      scale: 1,
-      rotateZ: 360,
-      transition: {
-        type: "spring",
-        damping: 20,
-        stiffness: 100,
-        delay: 0.5,
-      },
-    },
-  };
-
-  const Circle = styled(motion.div)`
-    background-color: white;
-    height: 70px;
-    width: 70px;
-    border-radius: 35px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-    place-self: center;
-  `;
-
   const boxVariants = {
-    start: { opacity: 0, scale: 0 },
-    end: {
-      opacity: 1,
+    hover: {
+      scale: 1.5,
+      rotateZ: 90,
+    },
+    click: {
+      borderRadius: "100px",
       scale: 1,
+    },
+    drag: {
+      backgroundColor: "#4bcffa",
       transition: {
-        type: "spring",
-        duration: 0.5,
-        bounce: 0.5,
-
-        delayChildren: 0.25, //자식 요소에 실행됨
-        staggerChildren: 0.25, //자식 요소 첫 번째부터 다음 순서 대로 0.5씩 증가
+        duration: 3,
       },
     },
   };
 
-  const circleVariants = {
-    start: {
-      opacity: 0,
-      y: 100,
-      x: 100,
-    },
-    end: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-    },
-  };
-
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <Box variants={boxVariants} initial="start" animate="end">
-          {/* 자식요소들은 부모요소의 initial과 animate를 상속 받는다. 대신 이름 같게 */}
-          <Circle variants={circleVariants} />
-          <Circle variants={circleVariants} />
-          <Circle variants={circleVariants} />
-          <Circle variants={circleVariants} />
-        </Box>
-      </Wrapper>
-    </>
-  );
-  return (
-    <>
-      <GlobalStyle />
-      <Wrapper>
-        <Box
-          // transition={{
-          //   type: "spring",
-          //   damping: 20,
-          //   stiffness: 100,
-          //   delay: 0.5,
-          // }}
-          // initial={{ scale: 0 }}
-          // animate={{ scale: 1, rotateZ: 360 }} 3개 props를 myVariants 변수로 정의
-          variants={myVariants}
-          initial="start" // myVariants 의 start
-          animate="end" // myVariants 의 end
+        {/* <Box
+          whileHover={{ scale: 1.5, rotateZ: 90 }}
+          whileTap={{ borderRadius: "100px", scale: 1 }}
         />
-        {/* initial 초기상태 설정 */}
-        {/* animate은 기본으로 spring (튕기는 모션) */}
+        variant 사용 X */}
+        <Box
+          drag
+          whileDrag="drag"
+          // 색을 변경할 때 색 이름 red 같은 건 안되고 rgb, hex  backgroundColor: "#4bcffa"
+          variants={boxVariants}
+          whileHover={true ? "hover" : "other"}
+          whileTap="click"
+        />
       </Wrapper>
     </>
   );
