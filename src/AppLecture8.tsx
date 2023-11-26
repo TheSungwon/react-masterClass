@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -76,6 +77,17 @@ const Wrapper = styled(motion.div)`
   align-items: center;
 `;
 
+const BiggerBox = styled.div`
+  width: 600px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
@@ -92,7 +104,7 @@ function AppLecture8() {
 
   const boxVariants = {
     hover: {
-      scale: 1.5,
+      scale: 1,
       rotateZ: 90,
     },
     click: {
@@ -107,6 +119,8 @@ function AppLecture8() {
     },
   };
 
+  const biggerBoxRef = useRef<HTMLDivElement>(null);
+  console.log(biggerBoxRef);
   return (
     <>
       <GlobalStyle />
@@ -116,14 +130,23 @@ function AppLecture8() {
           whileTap={{ borderRadius: "100px", scale: 1 }}
         />
         variant 사용 X */}
-        <Box
-          drag
-          whileDrag="drag"
-          // 색을 변경할 때 색 이름 red 같은 건 안되고 rgb, hex  backgroundColor: "#4bcffa"
-          variants={boxVariants}
-          whileHover={true ? "hover" : "other"}
-          whileTap="click"
-        />
+        <BiggerBox ref={biggerBoxRef}>
+          <Box
+            drag
+            // drag="x" "y" 를 주면 x, y에 고정
+            // dragConstraints={{ bottom: -50, top: 50, left: -50, right: 50 }}
+            dragConstraints={biggerBoxRef}
+            //드래그 위치를 제약 dragConstraints
+
+            dragSnapToOrigin //드래그 후 마우스 떼면 다시 제자리
+            dragElastic={0} // 0~1사잇값, 드래그할 때 마우스 당기는 거리
+            whileDrag="drag"
+            // 색을 변경할 때 색 이름 red 같은 건 안되고 rgb, hex  backgroundColor: "#4bcffa"
+            variants={boxVariants}
+            whileHover={true ? "hover" : "other"}
+            whileTap="click"
+          />
+        </BiggerBox>
       </Wrapper>
     </>
   );
