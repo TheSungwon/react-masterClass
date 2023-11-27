@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, motionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -77,17 +77,6 @@ const Wrapper = styled(motion.div)`
   align-items: center;
 `;
 
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
@@ -98,55 +87,18 @@ const Box = styled(motion.div)`
 `;
 
 function AppLecture8() {
-  // framer motion을 사용해서 animate하려면
-  // <motion.div ~~ 으로 시작해서 사용
-  // <div>으로 animate 불가
+  const x = motionValue(0);
+  //x 위치가 바뀌어도 리렌더는 되지 않음. x값 위치를 확인하려면 useEffect로 체크
+  useEffect(() => {
+    x.onChange(() => console.log(x.get()));
+  }, [x]);
 
-  const boxVariants = {
-    hover: {
-      scale: 1,
-      rotateZ: 90,
-    },
-    click: {
-      borderRadius: "100px",
-      scale: 1,
-    },
-    drag: {
-      backgroundColor: "#4bcffa",
-      transition: {
-        duration: 3,
-      },
-    },
-  };
-
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
-  console.log(biggerBoxRef);
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        {/* <Box
-          whileHover={{ scale: 1.5, rotateZ: 90 }}
-          whileTap={{ borderRadius: "100px", scale: 1 }}
-        />
-        variant 사용 X */}
-        <BiggerBox ref={biggerBoxRef}>
-          <Box
-            drag
-            // drag="x" "y" 를 주면 x, y에 고정
-            // dragConstraints={{ bottom: -50, top: 50, left: -50, right: 50 }}
-            dragConstraints={biggerBoxRef}
-            //드래그 위치를 제약 dragConstraints
-
-            dragSnapToOrigin //드래그 후 마우스 떼면 다시 제자리
-            dragElastic={0} // 0~1사잇값, 드래그할 때 마우스 당기는 거리
-            whileDrag="drag"
-            // 색을 변경할 때 색 이름 red 같은 건 안되고 rgb, hex  backgroundColor: "#4bcffa"
-            variants={boxVariants}
-            whileHover={true ? "hover" : "other"}
-            whileTap="click"
-          />
-        </BiggerBox>
+        <button onClick={() => x.set(200)}>click me</button>
+        <Box style={{ x }} drag="x" dragSnapToOrigin />
       </Wrapper>
     </>
   );
