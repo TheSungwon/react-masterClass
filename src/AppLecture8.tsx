@@ -1,4 +1,4 @@
-import { motion, motionValue } from "framer-motion";
+import { motion, motionValue, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -89,16 +89,20 @@ const Box = styled(motion.div)`
 function AppLecture8() {
   const x = motionValue(0);
   //x 위치가 바뀌어도 리렌더는 되지 않음. x값 위치를 확인하려면 useEffect로 체크
-  useEffect(() => {
-    x.onChange(() => console.log(x.get()));
-  }, [x]);
+
+  const scale = useTransform(x, [-400, 0, 400], [2, 1, 0.1]);
+  //인자1 변경할 motionValue, 인자2 변경될 위치, 인자3 변경될 위치에서 받을 값
+  // useEffect(() => {
+  //   x.onChange(() => console.log(x.get()));
+  //   scale.onChange(() => console.log(scale.get()));
+  // }, [x]);
 
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <button onClick={() => x.set(200)}>click me</button>
-        <Box style={{ x }} drag="x" dragSnapToOrigin />
+        <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
       </Wrapper>
     </>
   );
