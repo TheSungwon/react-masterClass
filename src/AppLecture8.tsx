@@ -1,4 +1,4 @@
-import { motion, motionValue, useTransform } from "framer-motion";
+import { motion, motionValue, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -59,7 +59,8 @@ body {
   /* background-color:${(props) => props.theme.bgColor}; */
   color:black;
   line-height: 1.2;
-  background:linear-gradient(135deg,#e09,#d0e);
+  /* background: linear-gradient(135deg, #e09, #d0e); */
+
 }
 a {
   text-decoration:none;
@@ -71,7 +72,7 @@ a {
 // const Wrapper = styled.div`
 const Wrapper = styled(motion.div)`
   display: flex;
-  height: 100vh;
+  height: 200vh;
   width: 100vw;
   justify-content: center;
   align-items: center;
@@ -91,18 +92,40 @@ function AppLecture8() {
   //x 위치가 바뀌어도 리렌더는 되지 않음. x값 위치를 확인하려면 useEffect로 체크
 
   const scale = useTransform(x, [-400, 0, 400], [2, 1, 0.1]);
+  const rotateZ = useTransform(x, [-400, 400], [-360, 360]);
   //인자1 변경할 motionValue, 인자2 변경될 위치, 인자3 변경될 위치에서 받을 값
   // useEffect(() => {
   //   x.onChange(() => console.log(x.get()));
   //   scale.onChange(() => console.log(scale.get()));
   // }, [x]);
 
+  const gradient = useTransform(
+    x,
+    [-400, 400],
+    [
+      "linear-gradient(135deg,#5300ee,#00abee0ee)",
+
+      "linear-gradient(135deg,#58be43,#ee0000)",
+    ]
+  );
+
+  ///////////////////////
+  //scroll값인 motionValue -> useViewportScroll();에서 useScroll()로 변경됨
+  const { scrollY, scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    scrollY.onChange(() => {
+      // console.log(scrollY.get(), scrollYProgress.get());
+    });
+  }, [scrollY, scrollYProgress]);
+
+  const scaleY = useTransform(scrollYProgress, [0, 1], [1, 5]);
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
+      <Wrapper style={{ background: gradient }}>
         <button onClick={() => x.set(200)}>click me</button>
-        <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
+        <Box style={{ x, scale: scaleY, rotateZ }} drag="x" dragSnapToOrigin />
       </Wrapper>
     </>
   );
