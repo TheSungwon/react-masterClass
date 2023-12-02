@@ -82,6 +82,8 @@ const Wrapper = styled(motion.div)`
   width: 100vw;
   justify-content: center;
   align-items: center;
+
+  flex-direction: column;
 `;
 
 const Box = styled(motion.div)`
@@ -91,6 +93,12 @@ const Box = styled(motion.div)`
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
 `;
 
 function AppLecture8() {
@@ -146,7 +154,9 @@ function AppLecture8() {
       // transition: { duration: 2 },
     },
   };
-
+  ////
+  ////
+  ////animatePresence
   const [showing, setShowing] = useState(false);
   const toggleShowing = () => {
     return setShowing((pre) => !pre);
@@ -171,11 +181,39 @@ function AppLecture8() {
     },
   };
 
+  //
+  const [visible, setVisible] = useState(1);
+  const nextPlease = () => setVisible((pre) => (pre === 10 ? 1 : pre + 1));
+  const prevPlease = () => setVisible((pre) => (pre === 1 ? 1 : pre - 1));
+  const box = {
+    invisible: {
+      x: 500,
+      opacity: 0,
+      scale: 0,
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 1,
+      },
+    },
+    exit: {
+      x: -500,
+      opacity: 0,
+      scale: 0,
+      rotateZ: 360,
+      transition: {
+        duration: 1,
+      },
+    },
+  };
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <button onClick={toggleShowing}>click</button>
+        <button onClick={toggleShowing}>showing click</button>
         <AnimatePresence>
           {/* 태그가 조건으로 나타낼때 animatePresence는 바깥에 안에는 조건  */}
           {showing ? (
@@ -200,6 +238,24 @@ function AppLecture8() {
             </Svg>
           ) : null}
         </AnimatePresence>
+
+        <AnimatePresence>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
+            visible === i ? (
+              <Box
+                variants={box}
+                initial="invisible"
+                animate="visible"
+                exit="exit"
+                key={i}
+              >
+                {i}
+              </Box>
+            ) : null
+          )}
+        </AnimatePresence>
+        <button onClick={nextPlease}>visible next click</button>
+        <button onClick={prevPlease}>visible prev click</button>
       </Wrapper>
     </>
     // <>
