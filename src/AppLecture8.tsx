@@ -183,31 +183,45 @@ function AppLecture8() {
 
   //
   const [visible, setVisible] = useState(1);
-  const nextPlease = () => setVisible((pre) => (pre === 10 ? 1 : pre + 1));
-  const prevPlease = () => setVisible((pre) => (pre === 1 ? 1 : pre - 1));
+  const [back, setBack] = useState(false);
+  const nextPlease = () => {
+    setBack(false);
+    setVisible((pre) => (pre === 10 ? 1 : pre + 1));
+  };
+
+  const prevPlease = () => {
+    setBack(true);
+    setVisible((pre) => (pre === 1 ? 1 : pre - 1));
+  };
+
   const box = {
-    invisible: {
-      x: 500,
+    //variants object
+    entry: (back: boolean) => ({
+      //function change 1st.
+      x: back ? -500 : 500,
       opacity: 0,
       scale: 0,
+    }),
+    center: (back: boolean) => {
+      //function change 2nd.
+      return {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        transition: {
+          duration: 1,
+        },
+      };
     },
-    visible: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 1,
-      },
-    },
-    exit: {
-      x: -500,
+    exit: (back: boolean) => ({
+      x: back ? 500 : -500,
       opacity: 0,
       scale: 0,
       rotateZ: 360,
       transition: {
         duration: 1,
       },
-    },
+    }),
   };
   return (
     <>
@@ -239,20 +253,35 @@ function AppLecture8() {
           ) : null}
         </AnimatePresence>
 
-        <AnimatePresence>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-            visible === i ? (
-              <Box
-                variants={box}
-                initial="invisible"
-                animate="visible"
-                exit="exit"
-                key={i}
-              >
-                {i}
-              </Box>
-            ) : null
-          )}
+        {/* <AnimatePresence custom={back} mode="wait"> 
+        mode="wait"이 추가되면 exit가 완전히 끝나야 initial 됨
+        */}
+
+        <AnimatePresence custom={back}>
+          {/* react js는 각 element는 key가 있어야 고유하다고 생각함
+          현재 key가 사라지고 다른 key가 생기면 새 element가 생겼다고 생각
+          그리고 key가 바귀면 component를 리렌더 해줌
+          따라서 array를 적어주지 않아도 됨*/}
+          {/* AnimatePresence의 exit는 element가 사라지면 작동
+          마찬가지로 element가 생성되는 때는 initial, animate 작동 */}
+          {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
+            visible === i ? ( */}
+
+          {/* custom은 variants에 데이터를 보낼 수 있게 해주는 property
+          AnimatePresence와 사용하려는 element에도 custom prop 적용
+          그리고 variants는 function으로 변경 */}
+          <Box
+            custom={back}
+            variants={box}
+            initial="entry"
+            animate="center"
+            exit="exit"
+            key={visible}
+          >
+            {visible}
+          </Box>
+          {/* ) : null
+          )} */}
         </AnimatePresence>
         <button onClick={nextPlease}>visible next click</button>
         <button onClick={prevPlease}>visible prev click</button>
