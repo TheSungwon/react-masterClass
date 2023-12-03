@@ -223,10 +223,24 @@ function AppLecture8() {
       },
     }),
   };
+
+  /////////
+  ////////
+  ///layout prop
+  const Circle = styled(motion.div)`
+    background-color: #00a5ff;
+    height: 100px;
+    width: 100px;
+
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  `;
+  const [clicked, setClicked] = useState(false);
+  const toggleClicked = () => setClicked((pre) => !pre);
+
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
+      <Wrapper onClick={toggleClicked}>
         <button onClick={toggleShowing}>showing click</button>
         <AnimatePresence>
           {/* 태그가 조건으로 나타낼때 animatePresence는 바깥에 안에는 조건  */}
@@ -285,6 +299,19 @@ function AppLecture8() {
         </AnimatePresence>
         <button onClick={nextPlease}>visible next click</button>
         <button onClick={prevPlease}>visible prev click</button>
+
+        <Box style={{ top: "600px", left: "300px" }}>
+          {clicked ? null : (
+            <Circle layoutId="circle" style={{ borderRadius: 50, scale: 2 }} />
+          )}
+          {/*Circle에 layout prop을 주면 css가 변하는 과정을 animate 해줌 */}
+        </Box>
+        <Box style={{ top: "600px", left: "50px" }}>
+          {clicked ? (
+            <Circle layoutId="circle" style={{ borderRadius: 0 }} />
+          ) : null}
+        </Box>
+        {/* 다른 컴포넌트지만 layoutId값을 같이 해주면 framer는 컴포넌트를 연결하고 animate해줌 */}
       </Wrapper>
     </>
     // <>
