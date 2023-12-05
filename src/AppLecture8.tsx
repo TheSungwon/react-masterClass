@@ -74,253 +74,72 @@ a {
 }
 `;
 
-//animate가 style components를 사용하려면 styled(motion.TagName)
-// const Wrapper = styled.div`
 const Wrapper = styled(motion.div)`
-  display: flex;
   height: 100vh;
   width: 100vw;
-  justify-content: center;
+  display: flex;
+  justify-content: space-around;
   align-items: center;
 
   flex-direction: column;
 `;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 50vw;
+  gap: 10px;
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
+`;
 
 const Box = styled(motion.div)`
-  width: 200px;
-  height: 200px;
-  /* background-color: white; */
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
+  height: 200px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const Overlay = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  position: absolute;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 10px;
 `;
 
 function AppLecture8() {
-  const x = motionValue(0);
-  //x 위치가 바뀌어도 리렌더는 되지 않음. x값 위치를 확인하려면 useEffect로 체크
-
-  const scale = useTransform(x, [-400, 0, 400], [2, 1, 0.1]);
-  const rotateZ = useTransform(x, [-400, 400], [-360, 360]);
-  //인자1 변경할 motionValue, 인자2 변경될 위치, 인자3 변경될 위치에서 받을 값
-  // useEffect(() => {
-  //   x.onChange(() => console.log(x.get()));
-  //   scale.onChange(() => console.log(scale.get()));
-  // }, [x]);
-
-  const gradient = useTransform(
-    x,
-    [-400, 400],
-    [
-      "linear-gradient(135deg,#5300ee,#00abee0ee)",
-
-      "linear-gradient(135deg,#58be43,#ee0000)",
-    ]
-  );
-
-  ///////////////////////
-  //scroll값인 motionValue -> useViewportScroll();에서 useScroll()로 변경됨
-  const { scrollY, scrollYProgress } = useScroll();
-
-  useEffect(() => {
-    scrollY.onChange(() => {
-      // console.log(scrollY.get(), scrollYProgress.get());
-    });
-  }, [scrollY, scrollYProgress]);
-
-  const scaleY = useTransform(scrollYProgress, [0, 1], [1, 5]);
-  /////////////////
-  /////////////////
-  // svg
-  const Svg = styled(motion.svg)`
-    width: 300px;
-    height: 300px;
-    path {
-      stroke: black;
-      stroke-width: 2;
-    }
-  `;
-
-  const svg = {
-    start: { pathLength: 0, fill: "rgba(255,255,255,0)" },
-    end: {
-      pathLength: 1,
-      fill: "rgba(255,123,222,1)",
-      // transition: { duration: 2 },
-    },
+  const [click, setClick] = useState(false);
+  const toggle = () => {
+    setClick((pre) => !pre);
   };
-  ////
-  ////
-  ////animatePresence
-  const [showing, setShowing] = useState(false);
-  const toggleShowing = () => {
-    return setShowing((pre) => !pre);
-  };
-  const animatePresenceVariants = {
-    initial: {
-      opacity: 0,
-      scale: 0,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotateZ: 360,
-      transition: {
-        duration: 1,
-      },
-    },
-    leave: {
-      opacity: 0,
-      scale: 0,
-      y: 100,
-    },
-  };
-
-  //
-  const [visible, setVisible] = useState(1);
-  const [back, setBack] = useState(false);
-  const nextPlease = () => {
-    setBack(false);
-    setVisible((pre) => (pre === 10 ? 1 : pre + 1));
-  };
-
-  const prevPlease = () => {
-    setBack(true);
-    setVisible((pre) => (pre === 1 ? 1 : pre - 1));
-  };
-
-  const box = {
-    //variants object
-    entry: (back: boolean) => ({
-      //function change 1st.
-      x: back ? -500 : 500,
-      opacity: 0,
-      scale: 0,
-    }),
-    center: (back: boolean) => {
-      //function change 2nd.
-      return {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        transition: {
-          duration: 1,
-        },
-      };
-    },
-    exit: (back: boolean) => ({
-      x: back ? 500 : -500,
-      opacity: 0,
-      scale: 0,
-      rotateZ: 360,
-      transition: {
-        duration: 1,
-      },
-    }),
-  };
-
-  /////////
-  ////////
-  ///layout prop
-  const Circle = styled(motion.div)`
-    background-color: #00a5ff;
-    height: 100px;
-    width: 100px;
-
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  `;
-  const [clicked, setClicked] = useState(false);
-  const toggleClicked = () => setClicked((pre) => !pre);
-
   return (
     <>
       <GlobalStyle />
-      <Wrapper onClick={toggleClicked}>
-        <button onClick={toggleShowing}>showing click</button>
-        <AnimatePresence>
-          {/* 태그가 조건으로 나타낼때 animatePresence는 바깥에 안에는 조건  */}
-          {showing ? (
-            <Svg
-              variants={animatePresenceVariants} //AnimatePresence
-              initial="initial" //AnimatePresence
-              animate="visible" //AnimatePresence
-              exit="leave" //AnimatePresence
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
+      <Wrapper onClick={toggle}>
+        <Grid>
+          <Box layoutId="hello" />
+          <Box />
+          <Box />
+          <Box />
+        </Grid>
+        <AnimatePresence mode="wait">
+          {click ? (
+            <Overlay
+              initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+              animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+              exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             >
-              <motion.path
-                variants={svg}
-                initial="start"
-                animate="end"
-                transition={{
-                  default: { duration: 5 },
-                  fill: { duration: 2, delay: 1 },
-                }}
-                d="M224 373.1c-25.2-31.7-40.1-59.4-45-83.2-22.6-88 112.6-88 90.1 0-5.5 24.3-20.3 52-45 83.2zm138.2 73.2c-42.1 18.3-83.7-10.9-119.3-50.5 103.9-130.1 46.1-200-18.9-200-54.9 0-85.2 46.5-73.3 100.5 6.9 29.2 25.2 62.4 54.4 99.5-32.5 36.1-60.6 52.7-85.2 54.9-50 7.4-89.1-41.1-71.3-91.1 15.1-39.2 111.7-231.2 115.9-241.6 15.8-30.1 25.6-57.4 59.4-57.4 32.3 0 43.4 25.9 60.4 59.9 36 70.6 89.4 177.5 114.8 239.1 13.2 33.1-1.4 71.3-37 86.6zm47-136.1C280.3 35.9 273.1 32 224 32c-45.5 0-64.9 31.7-84.7 72.8C33.2 317.1 22.9 347.2 22 349.8-3.2 419.1 48.7 480 111.6 480c21.7 0 60.6-6.1 112.4-62.4 58.7 63.8 101.3 62.4 112.4 62.4 62.9 .1 114.9-60.9 89.6-130.2 0-3.9-16.8-38.9-16.8-39.6z"
-              />
-            </Svg>
+              <Box layoutId="hello" style={{ width: 400 }} />
+            </Overlay>
           ) : null}
         </AnimatePresence>
-
-        {/* <AnimatePresence custom={back} mode="wait"> 
-        mode="wait"이 추가되면 exit가 완전히 끝나야 initial 됨
-        */}
-
-        <AnimatePresence custom={back}>
-          {/* react js는 각 element는 key가 있어야 고유하다고 생각함
-          현재 key가 사라지고 다른 key가 생기면 새 element가 생겼다고 생각
-          그리고 key가 바귀면 component를 리렌더 해줌
-          따라서 array를 적어주지 않아도 됨*/}
-          {/* AnimatePresence의 exit는 element가 사라지면 작동
-          마찬가지로 element가 생성되는 때는 initial, animate 작동 */}
-          {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-            visible === i ? ( */}
-
-          {/* custom은 variants에 데이터를 보낼 수 있게 해주는 property
-          AnimatePresence와 사용하려는 element에도 custom prop 적용
-          그리고 variants는 function으로 변경 */}
-          <Box
-            custom={back}
-            variants={box}
-            initial="entry"
-            animate="center"
-            exit="exit"
-            key={visible}
-          >
-            {visible}
-          </Box>
-          {/* ) : null
-          )} */}
-        </AnimatePresence>
-        <button onClick={nextPlease}>visible next click</button>
-        <button onClick={prevPlease}>visible prev click</button>
-
-        <Box style={{ top: "600px", left: "300px" }}>
-          {clicked ? null : (
-            <Circle layoutId="circle" style={{ borderRadius: 50, scale: 2 }} />
-          )}
-          {/*Circle에 layout prop을 주면 css가 변하는 과정을 animate 해줌 */}
-        </Box>
-        <Box style={{ top: "600px", left: "50px" }}>
-          {clicked ? (
-            <Circle layoutId="circle" style={{ borderRadius: 0 }} />
-          ) : null}
-        </Box>
-        {/* 다른 컴포넌트지만 layoutId값을 같이 해주면 framer는 컴포넌트를 연결하고 animate해줌 */}
       </Wrapper>
     </>
-    // <>
-    //   <GlobalStyle />
-    //   <Wrapper style={{ background: gradient }}>
-    //     <button onClick={() => x.set(200)}>click me</button>
-    //     <Box style={{ x, scale: scaleY, rotateZ }} drag="x" dragSnapToOrigin />
-    //   </Wrapper>
-    // </>
   );
 }
 
