@@ -113,28 +113,26 @@ const Overlay = styled(motion.div)`
 `;
 
 function AppLecture8() {
-  const [click, setClick] = useState(false);
-  const toggle = () => {
-    setClick((pre) => !pre);
-  };
+  const [id, setId] = useState<null | string>(null);
+  console.log(id);
   return (
     <>
       <GlobalStyle />
-      <Wrapper onClick={toggle}>
+      <Wrapper>
         <Grid>
-          <Box layoutId="hello" />
-          <Box />
-          <Box />
-          <Box />
+          {[1, 2, 3, 4].map((n) => (
+            <Box key={n} layoutId={n + ""} onClick={() => setId(n + "")} />
+          ))}
         </Grid>
         <AnimatePresence mode="wait">
-          {click ? (
+          {id ? (
             <Overlay
+              onClick={() => setId(null)}
               initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
               animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
               exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             >
-              <Box layoutId="hello" style={{ width: 400 }} />
+              <Box layoutId={id + ""} style={{ width: 400 }} />
             </Overlay>
           ) : null}
         </AnimatePresence>
