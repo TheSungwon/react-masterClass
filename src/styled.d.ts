@@ -19,5 +19,13 @@ declare module "styled-components" {
     //
     cardColor?: string;
     boardColor?: string;
+
+    //netflix lecture
+    red?: string;
+    black?: { verDark?: string; darker?: string; lighter?: string };
+    white?: {
+      lighter: ?string;
+      darker?: string;
+    };
   }
 }
