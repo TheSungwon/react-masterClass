@@ -24,7 +24,7 @@ declare module "styled-components" {
     red?: string;
     black?: { verDark?: string; darker?: string; lighter?: string };
     white?: {
-      lighter: ?string;
+      lighter?: string;
       darker?: string;
     };
   }

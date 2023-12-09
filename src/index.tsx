@@ -9,6 +9,7 @@ import { dargTheme, darkTheme, theme } from "./theme";
 import AppLecture7 from "./AppLecture7";
 import AppLecture8 from "./AppLecture8";
 import AppLecture9 from "./AppLecture9";
+import { createRoot } from "react-dom/client";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -93,7 +94,11 @@ const queryClient = new QueryClient();
 // );
 
 // @@@@To-Do list project
-ReactDOM.render(
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
+
+// ReactDOM.render(
+root.render(
   <React.StrictMode>
     <RecoilRoot>
       {/* recoil을 사용하기 위한 선언 + atoms.ts 파일생성*/}
@@ -103,6 +108,5 @@ ReactDOM.render(
         <AppLecture9 />
       </ThemeProvider>
     </RecoilRoot>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
