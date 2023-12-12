@@ -1,16 +1,16 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useAnimation, useScroll } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: black;
+  /* background-color: black; */
   height: 80px;
   font-size: 14px;
   padding: 20px 60px;
@@ -67,6 +67,12 @@ const Input = styled(motion.input)`
   transform-origin: right center; //animate 시작방향 오른쪽부터
   position: absolute;
   left: 360px;
+  padding: 5px 10px;
+  padding-left: 40px;
+  z-index: -1;
+  color: white;
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme.white?.lighter};
 `;
 
 const Circle = styled(motion.span)`
@@ -87,7 +93,7 @@ const logoVariants = {
 
   active: {
     fillOpacity: [0, 1, 0],
-    rotateZ: [360, 0, 360],
+    rotateZ: [360, -360, 360],
     scale: [1, 2, 1],
     // 배열 말고 repeat 하려면
     transition: {
@@ -98,14 +104,49 @@ const logoVariants = {
   },
 };
 
+const navVariants = {
+  top: {
+    backgroundColor: "rgba(0,0,0,0)",
+  },
+  scroll: {
+    backgroundColor: "rgba(0,0,0,1)",
+  },
+};
+
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const openSearch = () => setSearchOpen((pre) => !pre);
+  const inputAnimation = useAnimation(); //동시에 애니메이션을 실행시키려고 할 때 유용 eg) 로그인 하고 동시에 20개 애니메이션 실행
+  const navAnimation = useAnimation();
+  const { scrollY } = useScroll(); //
+  useEffect(() => {
+    scrollY.onChange(() => {
+      if (scrollY.get() < 80) {
+        navAnimation.start("top");
+      } else {
+        navAnimation.start("scroll");
+      }
+    });
+  }, [scrollY, navAnimation]);
+
+  const re = useRef<any>(null);
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({
+        scaleX: 0,
+      });
+    } else {
+      inputAnimation.start({
+        scaleX: 1,
+      });
+    }
+
+    setSearchOpen((pre) => !pre);
+  };
 
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("tv");
   return (
-    <Nav>
+    <Nav ref={re} variants={navVariants} animate={navAnimation} initial="top">
       <Col>
         <Logo
           variants={logoVariants}
@@ -135,8 +176,9 @@ function Header() {
       </Col>
 
       <Col>
-        <Search onClick={openSearch}>
+        <Search>
           <motion.svg
+            onClick={toggleSearch}
             animate={{ x: searchOpen ? -200 : 0 }}
             transition={{ type: "linear" }}
             fill="currentColor"
@@ -151,7 +193,11 @@ function Header() {
           </motion.svg>
         </Search>
         <Input
-          animate={{ scaleX: searchOpen ? 1 : 0 }}
+          // useAnimation을 사용 O
+          animate={inputAnimation}
+          // useAnimation을 사용 X
+          // animate={{ scaleX: searchOpen ? 1 : 0 }}
+          initial={{ scaleX: 0 }}
           transition={{ type: "linear" }}
           placeholder="Search for movie or tv show ..."
         />
