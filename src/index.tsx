@@ -96,17 +96,19 @@ const queryClient = new QueryClient();
 // @@@@To-Do list project
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
-
+const client = new QueryClient();
 // ReactDOM.render(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
       {/* recoil을 사용하기 위한 선언 + atoms.ts 파일생성*/}
 
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <AppLecture9 />
-      </ThemeProvider>
+      <QueryClientProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <AppLecture9 />
+        </ThemeProvider>
+      </QueryClientProvider>
     </RecoilRoot>
   </React.StrictMode>
 );
