@@ -55,7 +55,7 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   height: 200px;
-  color: red;
+  /* color: red; */
   font-size: 20px;
   border-radius: 10px;
 
@@ -87,6 +87,31 @@ const boxVariants = {
   hover: {
     scale: 1.3,
     y: -50,
+
+    transition: {
+      delay: 0.3,
+      duration: 0.3,
+      // type: "tween",
+    },
+  },
+};
+
+const Info = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(props) => props.theme?.black?.lighter};
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+  }
+`;
+
+const infoVariants = {
+  hover: {
+    opacity: 1,
     transition: {
       delay: 0.3,
       duration: 0.3,
@@ -159,7 +184,11 @@ function Home() {
                         transition={{ type: "tween" }}
                         key={movie.id}
                         bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                      />
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{movie.title}</h4>
+                        </Info>
+                      </Box>
                     );
                   })}
               </Row>
