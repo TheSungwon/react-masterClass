@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useState } from "react";
+import { useMatch, useNavigate } from "react-router-dom";
 
 const Wrapper = styled(motion.div)`
   background-color: black;
@@ -69,6 +70,7 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   &:last-child {
     transform-origin: center right;
   }
+  cursor: pointer;
 `;
 
 const rowVariants = {
@@ -126,11 +128,23 @@ const infoVariants = {
 const offset = 6; //보여줄 페이지 수
 
 function Home() {
+  // react router 5 -> 6 변경
+  // 1. useHistory() => useNavigate()
+  // 2. useRouteMatch() => useMatch()
+  const history = useNavigate();
+
+  const onBoxClicked = (movieId: number) => {
+    history(`/movies/${movieId}`);
+  };
+
+  const bigMovieMatch = useMatch("/movies/:movieId");
+  console.log(bigMovieMatch);
+
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
-  console.log(data);
+  // console.log(data);
   const totalMovies = data && data?.results.length - 1; //첫 번째 영화 제외
   const maxIndex = totalMovies && Math.floor(totalMovies / offset) - 1; //4.2라면 0.2도 보여줘야 하기 때문에 ceil로 올림처리 + ceil이므로 -1
   //or 잘려보이는게 싫다면 Math.floor
@@ -178,6 +192,8 @@ function Home() {
                   .map((movie) => {
                     return (
                       <Box
+                        layoutId={movie.id + ""}
+                        onClick={() => onBoxClicked(movie.id)}
                         variants={boxVariants}
                         initial="normal"
                         whileHover="hover"
@@ -194,6 +210,23 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {bigMovieMatch && (
+              <motion.div
+                layoutId={bigMovieMatch.params?.movieId}
+                style={{
+                  position: "absolute",
+                  width: "40vw",
+                  height: "80vh",
+                  backgroundColor: "red",
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  margin: "auto",
+                }}
+              ></motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
