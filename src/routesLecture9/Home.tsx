@@ -122,17 +122,19 @@ const infoVariants = {
   },
 };
 
-const BigMovie = styled(motion.div)<{ scrollY: number }>`
+const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
   height: 80vh;
-  background-color: red;
-  border-radius: 20;
+  /* background-color: red; */
+  border-radius: 20px;
 
-  /* top: ${(props) => props.scrollY}px; */
   left: 0;
   right: 0;
   margin: auto;
+
+  overflow: hidden;
+  background-color: ${(props) => props.theme.black?.lighter};
 `;
 
 const Overlay = styled(motion.div)`
@@ -142,6 +144,29 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+`;
+
+const BigCover = styled(motion.div)`
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center center;
+`;
+
+const BigTitle = styled(motion.h3)`
+  color: ${(props) => props.theme.white?.lighter};
+  /* text-align: center; */
+  font-size: 26px;
+  padding: 10px;
+  position: relative;
+  top: -80px;
+`;
+
+const BigOverview = styled(motion.p)`
+  color: ${(props) => props.theme.white?.lighter};
+  padding: 20px;
+  position: relative;
+  top: -80px;
 `;
 
 //offset = 3 , index = 0, 1
@@ -160,7 +185,7 @@ function Home() {
   };
 
   const bigMovieMatch = useMatch("/movies/:movieId");
-  console.log(bigMovieMatch);
+  // console.log(bigMovieMatch);
 
   const onOverlayClicked = () => {
     history(`/`);
@@ -185,6 +210,13 @@ function Home() {
       ? toggleLeaving()
       : setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
   const toggleLeaving = () => setLeaving((prev) => !prev);
+
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find(
+      (movie) => movie.id + "" === bigMovieMatch.params.movieId
+    );
+  console.log(clickedMovie);
 
   return (
     <Wrapper>
@@ -248,9 +280,46 @@ function Home() {
                 />
                 <BigMovie
                   layoutId={bigMovieMatch.params?.movieId}
-                  scrollY={scrollY.get()}
                   style={{ top: scrollY.get() + 100 }}
-                ></BigMovie>
+                >
+                  {clickedMovie && (
+                    <>
+                      <BigCover
+                        style={{
+                          backgroundImage: `
+                          linear-gradient(to top, black, transparent),
+                          url(${makeImagePath(
+                            clickedMovie.backdrop_path,
+                            "w500"
+                          )})`,
+                        }}
+                      />
+
+                      <BigTitle
+                        initial={{ x: -2000 }}
+                        animate={{
+                          x: 0,
+                          transition: {
+                            duration: 0.5,
+                          },
+                        }}
+                      >
+                        {clickedMovie.title}
+                      </BigTitle>
+                      <BigOverview
+                        initial={{ x: 2000 }}
+                        animate={{
+                          x: 0,
+                          transition: {
+                            duration: 0.5,
+                          },
+                        }}
+                      >
+                        {clickedMovie.overview}
+                      </BigOverview>
+                    </>
+                  )}
+                </BigMovie>
               </>
             )}
           </AnimatePresence>
