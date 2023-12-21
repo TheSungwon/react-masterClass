@@ -1,6 +1,7 @@
 import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Link, useMatch } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled(motion.nav)`
@@ -52,7 +53,7 @@ const Item = styled.li`
   flex-direction: column;
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   svg {
     height: 25px;
@@ -64,15 +65,16 @@ const Search = styled.span`
 `;
 
 const Input = styled(motion.input)`
-  transform-origin: right center; //animate 시작방향 오른쪽부터
+  transform-origin: right center;
   position: absolute;
-  left: 360px;
+  right: -20px;
   padding: 5px 10px;
-  padding-left: 40px;
+
   z-index: -1;
   color: white;
+  font-size: 16px;
   background-color: transparent;
-  border: 1px solid ${(props) => props.theme.white?.lighter};
+  border: 1px solid ${(props) => props.theme?.white?.lighter};
 `;
 
 const Circle = styled(motion.span)`
@@ -113,7 +115,19 @@ const navVariants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 function Header() {
+  const history = useNavigate();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    setValue("keyword", "");
+    history(`/search?keyword=${data.keyword}`);
+    console.log(data);
+  };
+
   const [searchOpen, setSearchOpen] = useState(false);
   const inputAnimation = useAnimation(); //동시에 애니메이션을 실행시키려고 할 때 유용 eg) 로그인 하고 동시에 20개 애니메이션 실행
   const navAnimation = useAnimation();
@@ -176,7 +190,7 @@ function Header() {
       </Col>
 
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -200 : 0 }}
@@ -191,16 +205,17 @@ function Header() {
               clipRule="evenodd"
             ></path>
           </motion.svg>
+          <Input
+            {...register("keyword", { required: true, minLength: 2 })}
+            // useAnimation을 사용 O
+            animate={inputAnimation}
+            // useAnimation을 사용 X
+            // animate={{ scaleX: searchOpen ? 1 : 0 }}
+            initial={{ scaleX: 0 }}
+            transition={{ type: "linear" }}
+            placeholder="Search for movie or tv show ..."
+          />
         </Search>
-        <Input
-          // useAnimation을 사용 O
-          animate={inputAnimation}
-          // useAnimation을 사용 X
-          // animate={{ scaleX: searchOpen ? 1 : 0 }}
-          initial={{ scaleX: 0 }}
-          transition={{ type: "linear" }}
-          placeholder="Search for movie or tv show ..."
-        />
       </Col>
     </Nav>
   );
